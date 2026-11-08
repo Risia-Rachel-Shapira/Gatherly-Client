@@ -276,11 +276,7 @@ async function loadEvents() {
                 ? new Date(eventDate).toLocaleDateString("he-IL")
                 : "תאריך לא צוין";
 
-            const eventId = document.createElement("span");
-            eventId.textContent =
-                `מספר אירוע: ${event.id ?? event.Id}`;
-
-            card.append(title, date, eventId);
+            card.append(title, date);
             eventsList.appendChild(card);
         });
 
