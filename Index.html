@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatherly</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">Gatherly<span>.</span></div>
+        <button id="logoutButton" class="hidden secondary-button">
+            התנתקות
+        </button>
+    </header>
+
+    <main class="main">
+
+        <!-- מסכי התחברות והרשמה -->
+        <section id="authSection" class="auth-card">
+            <div class="auth-tabs">
+                <button class="tab active" id="loginTab">התחברות</button>
+                <button class="tab" id="registerTab">הרשמה</button>
+            </div>
+
+            <form id="loginForm">
+                <h1>שמחים לראות אותך!</h1>
+                <p>התחברי לחשבון שלך כדי להמשיך</p>
+
+                <label for="loginEmail">כתובת אימייל</label>
+                <input id="loginEmail" type="email" required>
+
+                <label for="loginPassword">סיסמה</label>
+                <input id="loginPassword" type="password" required>
+
+                <button class="primary-button" type="submit">התחברות</button>
+            </form>
+
+            <form id="registerForm" class="hidden">
+                <h1>מצטרפים ל-Gatherly</h1>
+                <p>צרי חשבון והתחילי לתכנן ביחד</p>
+
+                <label for="registerName">שם מלא</label>
+                <input id="registerName" type="text" required>
+
+                <label for="registerEmail">כתובת אימייל</label>
+                <input id="registerEmail" type="email" required>
+
+                <label for="registerPassword">סיסמה</label>
+                <input id="registerPassword" type="password" required>
+
+                <button class="primary-button" type="submit">יצירת חשבון</button>
+            </form>
+
+            <div id="message"></div>
+        </section>
+
+        <!-- מסך האירועים -->
+        <section id="eventsSection" class="events-section hidden">
+
+            <div class="events-heading">
+                <div>
+                    <p class="eyebrow">ברוכים הבאים ל-Gatherly</p>
+                    <h1>האירועים שלי</h1>
+                    <p id="welcomeMessage"></p>
+                </div>
+
+                <button id="createEventButton" class="primary-button">
+                    + אירוע חדש
+                </button>
+            </div>
+
+            <!-- הצטרפות לאירוע באמצעות קוד -->
+            <div class="auth-card">
+                <h2>הצטרפות לאירוע</h2>
+                <p>קיבלת קוד הזמנה? הזיני אותו כאן כדי להצטרף.</p>
+
+                <form id="joinEventForm">
+                    <label for="invitationToken">קוד הזמנה</label>
+                    <input
+                        id="invitationToken"
+                        type="text"
+                        placeholder="הדביקי כאן את קוד ההזמנה"
+                        required
+                    >
+
+                    <button type="submit" class="primary-button">
+                        הצטרפות לאירוע
+                    </button>
+                </form>
+
+                <div id="joinEventMessage"></div>
+            </div>
+
+            <!-- יצירת אירוע -->
+            <div id="createEventFormContainer" class="auth-card hidden">
+                <h2>יצירת אירוע חדש</h2>
+                <p>מלאי את פרטי האירוע</p>
+
+                <form id="createEventForm">
+                    <label for="eventName">שם האירוע</label>
+                    <input id="eventName" type="text" required maxlength="100">
+
+                    <label for="eventDescription">תיאור</label>
+                    <textarea id="eventDescription" rows="3"></textarea>
+
+                    <label for="eventDate">תאריך ושעה</label>
+                    <input id="eventDate" type="datetime-local" required>
+
+                    <label for="eventLocation">מיקום</label>
+                    <input id="eventLocation" type="text">
+
+                    <label for="eventBudget">תקציב (₪)</label>
+                    <input id="eventBudget" type="number" min="0" step="0.01">
+
+                    <label for="managementType">מה תרצי לנהל באירוע?</label>
+                    <select id="managementType" required>
+                        <option value="0">פריטים בלבד</option>
+                        <option value="1">תקציב והוצאות בלבד</option>
+                        <option value="2">פריטים וגם תקציב</option>
+                    </select>
+
+                    <button class="primary-button" type="submit">
+                        יצירת אירוע
+                    </button>
+
+                    <button type="button" id="cancelCreateEvent" class="secondary-button">
+                        ביטול
+                    </button>
+                </form>
+            </div>
+
+            <div id="eventsList" class="events-grid"></div>
+            <div id="eventsMessage"></div>
+
+            <div class="pagination">
+                <button id="previousPage" class="secondary-button">
+                    הקודם
+                </button>
+                <span id="pageInfo">עמוד 1</span>
+                <button id="nextPage" class="secondary-button">
+                    הבא
+                </button>
+            </div>
+
+        </section>
+
+        <!-- מסך פרטי אירוע -->
+        <section id="eventDetailsSection" class="events-section hidden">
+
+            <button id="backToEventsButton" class="secondary-button">
+                ← חזרה לאירועים שלי
+            </button>
+
+            <div id="eventDetailsMessage"></div>
+
+            <!-- כותרת האירוע -->
+            <div class="event-top-card">
+
+                <h1 id="detailsEventName"></h1>
+                <p id="currentEventRole" class="event-role"></p>
+                <p id="detailsEventDescription"></p>
+
+                <div id="organizerActions" class="event-actions hidden">
+                    <button id="editEventButton" class="primary-button" type="button">
+                        עריכת אירוע
+                    </button>
+                    <button id="deleteEventButton" class="secondary-button" type="button">
+                        מחיקת אירוע
+                    </button>
+                </div>
+
+                <span id="detailsEventId" class="hidden"></span>
+                <span id="detailsManagementType" class="hidden"></span>
+                <span id="detailsEventBudget" class="hidden"></span>
+
+            </div>
+
+            <!-- פרטי האירוע מוצגים בנפרד מהכותרת -->
+            <div class="event-meta-strip" aria-label="פרטי האירוע">
+                <div class="event-meta-item">
+                    <span class="event-meta-label">תאריך ושעה</span>
+                    <strong id="detailsEventDate"></strong>
+                </div>
+                <div class="event-meta-item">
+                    <span class="event-meta-label">מיקום</span>
+                    <strong id="detailsEventLocation"></strong>
+                </div>
+            </div>
+
+            <!-- פעולות וטפסי מנהלת באזור נפרד, לא בתוך כותרת האירוע -->
+            <div class="event-admin-area">
+                <div id="editEventFormContainer" class="auth-card hidden">
+                    <h3>עריכת פרטי האירוע</h3>
+                    <form id="editEventForm">
+                        <label for="editEventName">שם האירוע</label>
+                        <input id="editEventName" type="text" required maxlength="100">
+
+                        <label for="editEventDescription">תיאור</label>
+                        <textarea id="editEventDescription" rows="3"></textarea>
+
+                        <label for="editEventDate">תאריך ושעה</label>
+                        <input id="editEventDate" type="datetime-local" required>
+
+                        <label for="editEventLocation">מיקום</label>
+                        <input id="editEventLocation" type="text">
+
+                        <label for="editEventBudget">תקציב (₪)</label>
+                        <input id="editEventBudget" type="number" min="0" step="0.01">
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-button">שמירת שינויים</button>
+                            <button type="button" id="cancelEditEvent" class="secondary-button">ביטול</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="invitationSection" class="auth-card hidden">
+                    <h3>הזמנת משתתפים</h3>
+                    <p>צרי קוד הזמנה כדי לאפשר למשתמשים להצטרף לאירוע.</p>
+
+                    <label for="invitationExpiration">תוקף ההזמנה</label>
+                    <select id="invitationExpiration">
+                        <option value="1">יום אחד</option>
+                        <option value="7" selected>7 ימים</option>
+                        <option value="14">14 ימים</option>
+                        <option value="30">30 ימים</option>
+                    </select>
+
+                    <button id="createInvitationButton" type="button" class="primary-button">
+                        יצירת קוד הזמנה
+                    </button>
+                    <div id="invitationResult"></div>
+                </div>
+            </div>
+
+            <div id="eventMembersSection" class="auth-card">
+    <h3>משתתפי האירוע</h3>
+    <div id="eventMembersMessage"></div>
+    <div id="eventMembersList"></div>
+</div>
+
+            <!-- ניווט בין אזורי האירוע -->
+            <nav class="event-tabs">
+                <button type="button" class="event-tab active" data-tab="eventInfoPanel">
+                    פרטי האירוע
+                </button>
+
+                <button type="button" class="event-tab" data-tab="itemsPanel">
+                    רשימת פריטים
+                </button>
+
+                <button type="button" class="event-tab" data-tab="budgetPanel">
+                    ניהול כספי
+                </button>
+            </nav>
+
+            <!-- פרטי האירוע -->
+            <div id="eventInfoPanel" class="event-tab-panel">
+                <div class="auth-card">
+                    <h2>פרטי האירוע</h2>
+
+                    <p>
+                        <strong>תקציב מתוכנן:</strong>
+                        <span id="eventInfoBudget"></span>
+                    </p>
+
+                    <p>
+                        <strong>סוג ניהול:</strong>
+                        <span id="eventInfoManagement"></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- רשימת פריטים -->
+            <div id="itemsPanel" class="event-tab-panel hidden">
+
+                <div id="itemsSection" class="items-section">
+
+                    <div class="items-heading">
+                        <h2>רשימת הפריטים</h2>
+
+                        <button id="showAddItemButton" class="primary-button">
+                            + הוספת פריט
+                        </button>
+                    </div>
+
+                    <div id="addItemFormContainer" class="auth-card hidden">
+                        <h3>הוספת פריט לאירוע</h3>
+
+                        <form id="addItemForm">
+
+                            <label for="itemName">שם הפריט</label>
+                            <input id="itemName" type="text" required>
+
+                            <label for="itemDescription">תיאור</label>
+                            <textarea id="itemDescription" rows="3"></textarea>
+
+                            <label for="itemQuantity">כמות נדרשת</label>
+                            <input
+                                id="itemQuantity"
+                                type="number"
+                                min="1"
+                                step="1"
+                                value="1"
+                                required
+                            >
+
+                            <label for="itemEstimatedCost">
+                                עלות משוערת (₪)
+                            </label>
+                            <input
+                                id="itemEstimatedCost"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                            >
+
+                            <button type="submit" class="primary-button">
+                                שמירת פריט
+                            </button>
+
+                            <button
+                                type="button"
+                                id="cancelAddItemButton"
+                                class="secondary-button"
+                            >
+                                ביטול
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <div id="itemsMessage"></div>
+                    <div id="itemsList" class="items-grid"></div>
+
+                </div>
+            </div>
+
+            <!-- ניהול כספי -->
+            <div id="budgetPanel" class="event-tab-panel hidden">
+
+                <div id="budgetSection" class="budget-section">
+
+                    <!-- סיכום כספי -->
+                    <div class="budget-summary">
+                        <h2>סיכום כספי</h2>
+
+                        <div class="budget-summary-grid">
+
+                            <div class="budget-stat">
+                                <span>תקציב מתוכנן</span>
+                                <strong id="plannedBudget">—</strong>
+                            </div>
+
+                            <div class="budget-stat">
+                                <span>כסף שנאסף</span>
+                                <strong id="totalContributions">—</strong>
+                            </div>
+
+                            <div class="budget-stat">
+                                <span>הוצאות בפועל</span>
+                                <strong id="totalExpenses">—</strong>
+                            </div>
+
+                            <div class="budget-stat">
+                                <span>יתרה בקופה</span>
+                                <strong id="cashBalance">—</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="budget-share">
+                            <span>חלק שווה בהוצאות למשתתף</span>
+                            <strong id="sharePerParticipant">—</strong>
+                            <small id="activeMembersCount"></small>
+                        </div>
+                    </div>
+
+                    <div class="budget-columns">
+                        <div class="budget-column budget-column-expenses">
+                    <!-- הוספת הוצאה -->
+                    <div class="auth-card">
+                        <h3>רישום הוצאה חדשה</h3>
+
+                        <form id="addExpenseForm">
+
+                            <label for="expenseItemId">
+                                עבור איזה פריט שילמת?
+                            </label>
+
+                            <select id="expenseItemId">
+                                <option value="">הוצאה כללית (ללא פריט)</option>
+                            </select>
+
+                            <label for="expenseDescription">
+                                על מה שילמת?
+                            </label>
+
+                            <input
+                                id="expenseDescription"
+                                type="text"
+                                placeholder="הזיני תיאור קצר של ההוצאה"
+                                required
+                            >
+
+                            <label for="expenseAmount">
+                                כמה שילמת בפועל? (₪)
+                            </label>
+
+                            <input
+                                id="expenseAmount"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
+
+                            <button type="submit" class="primary-button">
+                                שמירת הוצאה
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <!-- רשימת הוצאות -->
+                    <div class="auth-card">
+                        <h3>הוצאות האירוע</h3>
+                        <div id="expensesMessage"></div>
+                        <div id="expensesList"></div>
+                    </div>
+
+                        </div>
+                        <div class="budget-column budget-column-contributions">
+                    <!-- הפקדה לקופה -->
+                    <div class="auth-card">
+                        <h3>הפקדת כסף לקופה המשותפת</h3>
+
+                        <form id="addContributionForm">
+
+                            <label for="contributionAmount">
+                                כמה כסף את מפקידה? (₪)
+                            </label>
+
+                            <input
+                                id="contributionAmount"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
+
+                            <button type="submit" class="primary-button">
+                                הפקדת כסף לקופה
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <!-- רשימת הפקדות -->
+                    <div class="auth-card">
+                        <h3>הפקדות המשתתפים</h3>
+                        <div id="contributionsMessage"></div>
+                        <div id="contributionsList"></div>
+                    </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
+
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A1%D7%A0%D7%9F%20%D7%AA%D7%95%D7%9B%D7%9F%20%D7%A9%D7%99%D7%93%D7%95%D7%A2%20%D7%9B%D7%90%D7%99%D7%A9%D7%99%20%D7%90%D7%95%20%D7%A4%D7%A8%D7%98%D7%99%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Filter%20content%20that%20is%20known%20as%20personal%20or%20private%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>

@@ -1,0 +1,2177 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f8fc;
+    color: #20243a;
+    direction: rtl;
+    min-height: 100vh;
+}
+
+.header {
+    height: 80px;
+    padding: 0 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-bottom: 1px solid #eeeeF4;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #343b70;
+}
+
+.logo span {
+    color: #7c72df;
+}
+
+.header nav {
+    display: flex;
+    gap: 28px;
+}
+
+.header nav a {
+    text-decoration: none;
+    color: #555b75;
+    font-weight: 600;
+}
+
+.main {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.welcome {
+    max-width: 650px;
+    text-align: center;
+}
+
+.eyebrow {
+    color: #7770d5;
+    font-weight: bold;
+    margin-bottom: 22px;
+}
+
+.welcome h1 {
+    font-size: clamp(42px, 7vw, 68px);
+    line-height: 1.2;
+    margin-bottom: 24px;
+}
+
+.description {
+    color: #74798d;
+    font-size: 19px;
+    line-height: 1.8;
+    margin-bottom: 32px;
+}
+
+.primary-button {
+    background: #7168d8;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 42px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.primary-button:hover {
+    background: #5d54c2;
+    transform: translateY(-2px);
+}
+
+
+.auth-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(40, 40, 80, 0.08);
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.tab {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #77798b;
+    font-size: 16px;
+}
+
+.tab.active {
+    color: #7168d8;
+    border-bottom: 3px solid #7168d8;
+    font-weight: bold;
+}
+
+.auth-card h1 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.auth-card p {
+    color: #85899b;
+    margin-bottom: 25px;
+}
+
+.auth-card label {
+    display: block;
+    margin: 15px 0 8px;
+    font-weight: bold;
+}
+
+.auth-card input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    font-size: 16px;
+}
+
+.auth-card .primary-button {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.hidden {
+    display: none;
+}
+
+#message {
+    margin-top: 15px;
+    text-align: center;
+}
+
+
+.events-section {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.events-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.events-heading h1 {
+    font-size: 36px;
+    margin: 10px 0;
+}
+
+.events-heading p {
+    color: #85899b;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 22px;
+}
+
+.event-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(40, 40, 80, 0.06);
+    border: 1px solid #eeeeF4;
+}
+
+.event-card h2 {
+    color: #343b70;
+    margin-bottom: 15px;
+}
+
+.event-card p {
+    color: #77798b;
+    margin-bottom: 12px;
+}
+
+.event-card span {
+    font-size: 13px;
+    color: #999;
+}
+
+.secondary-button {
+    background: white;
+    border: 1px solid #ddd;
+    color: #555b75;
+    padding: 10px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.secondary-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-top: 35px;
+}
+
+#eventsMessage {
+    text-align: center;
+    color: #77798b;
+    margin-top: 25px;
+}
+
+@media (max-width: 600px) {
+    .events-heading {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .events-heading h1 {
+        font-size: 29px;
+    }
+}
+
+
+#createEventFormContainer {
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+#createEventFormContainer h2 {
+    margin-bottom: 10px;
+    color: #343b70;
+}
+
+#createEventFormContainer textarea,
+#createEventFormContainer select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+#createEventFormContainer textarea {
+    resize: vertical;
+}
+
+#createEventFormContainer button {
+    margin-top: 20px;
+}
+
+#createEventFormContainer .secondary-button {
+    margin-right: 10px;
+}
+
+.event-details-info {
+    margin-top: 25px;
+    line-height: 2.2;
+}
+
+.event-details-info p {
+    border-bottom: 1px solid #eeeeee;
+    padding: 8px 0;
+}
+
+#backToEventsButton {
+    margin-bottom: 20px;
+}
+
+.event-card:focus {
+    outline: 2px solid #7163dc;
+    outline-offset: 3px;
+}
+
+.items-section {
+    margin-top: 35px;
+}
+
+.items-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.item-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 25px rgba(25, 30, 60, 0.06);
+}
+
+.item-card h3 {
+    margin-top: 0;
+    color: #29244f;
+}
+
+.item-card p {
+    color: #6b7280;
+    margin: 10px 0;
+}
+
+#addItemFormContainer {
+    margin-bottom: 25px;
+}
+
+.claim-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    align-items: center;
+}
+
+.claim-controls input {
+    width: 90px;
+    min-width: 0;
+}
+
+.claim-controls button {
+    flex: 1;
+}
+
+.claim-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* =====================================
+   עיצוב חדש למסך פרטי האירוע
+===================================== */
+
+.event-top-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 32px;
+    margin: 24px auto;
+    max-width: 1100px;
+    box-shadow: 0 8px 30px rgba(30, 35, 70, 0.06);
+}
+
+.event-top-card h1 {
+    color: #20234a;
+    font-size: 30px;
+    margin: 0 0 10px;
+}
+
+.event-top-card > p {
+    color: #777f99;
+    font-size: 17px;
+    margin-bottom: 22px;
+}
+
+.event-top-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    color: #777f99;
+    font-size: 15px;
+}
+
+
+/* =====================================
+   לשוניות ניווט
+===================================== */
+
+.event-tabs {
+    display: flex;
+    gap: 10px;
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 6px;
+    background: #eeedf8;
+    border-radius: 14px;
+}
+
+.event-tab {
+    flex: 1;
+    padding: 15px 10px;
+    border: none;
+    border-radius: 11px;
+    background: transparent;
+    color: #626783;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.event-tab:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.event-tab.active {
+    background: #7162dc;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(113, 98, 220, 0.2);
+}
+
+.event-tab-panel {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.event-tab-panel.hidden {
+    display: none !important;
+}
+
+
+/* =====================================
+   אזור התקציב
+===================================== */
+
+.budget-section {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.budget-summary {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(30, 35, 70, 0.06);
+}
+
+.budget-summary h2 {
+    color: #20234a;
+    margin: 0 0 25px;
+    font-size: 23px;
+}
+
+.budget-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.budget-stat {
+    background: #f6f6fc;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.budget-stat span {
+    color: #777f99;
+    font-size: 15px;
+}
+
+.budget-stat strong {
+    color: #25284e;
+    font-size: 25px;
+}
+
+.budget-share {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background: #f0efff;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.budget-share span,
+.budget-share small {
+    color: #77719e;
+}
+
+.budget-share strong {
+    color: #6455cf;
+    font-size: 24px;
+}
+
+
+/* =====================================
+   כרטיסי טפסים ורשימות
+===================================== */
+
+.budget-section .auth-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 30px;
+    margin: 0;
+    box-shadow: 0 8px 30px rgba(30, 35, 70, 0.06);
+}
+
+.budget-section .auth-card h3 {
+    color: #20234a;
+    margin: 0 0 22px;
+    font-size: 21px;
+}
+
+.budget-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.budget-section label {
+    color: #424665;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.budget-section input,
+.budget-section select {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid #dedee8;
+    border-radius: 11px;
+    background: #ffffff;
+    font-size: 16px;
+    color: #292c4d;
+}
+
+.budget-section input:focus,
+.budget-section select:focus {
+    outline: none;
+    border-color: #7162dc;
+    box-shadow: 0 0 0 3px rgba(113, 98, 220, 0.12);
+}
+
+.budget-section .primary-button {
+    width: 100%;
+    margin-top: 15px;
+    min-height: 50px;
+    border-radius: 12px;
+}
+
+
+/* =====================================
+   כרטיסי הוצאות ותרומות
+===================================== */
+
+#expensesList,
+#contributionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#expensesList .item-card,
+#contributionsList .item-card {
+    background: #f8f8fc;
+    border: 1px solid #eeeeF5;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+#expensesList .item-card h4,
+#contributionsList .item-card h4 {
+    margin: 0 0 10px;
+    color: #25284e;
+    font-size: 17px;
+}
+
+#expensesList .item-card p,
+#contributionsList .item-card p {
+    color: #777f99;
+    margin: 7px 0;
+}
+
+#expensesList .item-card button,
+#contributionsList .item-card button {
+    margin-top: 10px;
+    margin-left: 8px;
+}
+
+
+/* =====================================
+   התאמה למסכים קטנים
+===================================== */
+
+@media (max-width: 700px) {
+
+    .event-top-card {
+        padding: 22px;
+    }
+
+    .event-top-card h1 {
+        font-size: 24px;
+    }
+
+    .event-tabs {
+        gap: 4px;
+    }
+
+    .event-tab {
+        padding: 13px 5px;
+        font-size: 13px;
+    }
+
+    .budget-summary,
+    .budget-section .auth-card {
+        padding: 20px;
+    }
+
+    .budget-summary-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .budget-stat {
+        padding: 14px;
+    }
+
+    .budget-stat strong {
+        font-size: 20px;
+    }
+
+    .event-top-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+.event-role {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #e8f0fe;
+    color: #3156a3;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* משתתפי האירוע */
+
+#eventMembersSection {
+    margin-top: 24px;
+}
+
+#eventMembersList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+#eventMembersList .item-card {
+    padding: 16px;
+    border-radius: 12px;
+}
+
+#eventMembersList h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+#eventMembersList p {
+    margin: 5px 0;
+}
+
+/* ==========================================================
+   BRAND REFRESH — refined editorial event-management UI
+   Compact components · generous separation · calm motion
+   Palette: Forest / Terracotta / Champagne / Warm white
+========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --brand-forest: #17483D;
+    --brand-forest-dark: #10372F;
+    --brand-green: #397A67;
+    --brand-green-pale: #EAF2EE;
+    --brand-terracotta: #C96F5B;
+    --brand-terracotta-pale: #F8ECE8;
+    --brand-champagne: #C8AC78;
+    --brand-champagne-pale: #F5F0E6;
+    --brand-ink: #263B35;
+    --brand-muted: #7C8982;
+    --brand-line: #E8EAE4;
+    --brand-canvas: #F6F6F1;
+    --brand-white: #FFFFFF;
+
+    --brand-shadow: 0 4px 16px rgba(28, 54, 45, .045);
+    --brand-shadow-hover: 0 7px 22px rgba(28, 54, 45, .075);
+    --brand-radius: 13px;
+    --brand-radius-small: 9px;
+    --brand-motion: 160ms ease;
+}
+
+/* Base: airy, calm, intentionally understated */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Heebo', sans-serif;
+    color: var(--brand-ink);
+    background: var(--brand-canvas);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .logo, .events-heading h1, .event-top-card h1 {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    letter-spacing: -.45px;
+}
+
+button, input, select, textarea {
+    font-family: 'Heebo', sans-serif;
+}
+
+button, a, input, select, textarea {
+    transition:
+        color var(--brand-motion),
+        background-color var(--brand-motion),
+        border-color var(--brand-motion),
+        box-shadow var(--brand-motion);
+}
+
+/* Brand header — separate navigation items, not a continuous bar */
+.header {
+    position: relative;
+    z-index: 5;
+    min-height: 76px;
+    height: auto;
+    padding: 13px clamp(20px, 5vw, 76px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    background: #FCFCF9;
+    border-bottom: 1px solid var(--brand-line);
+    box-shadow: 0 2px 10px rgba(30, 55, 46, .025);
+}
+
+.logo {
+    color: var(--brand-forest);
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--brand-terracotta);
+}
+
+.header nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.header nav a {
+    padding: 7px 12px;
+    border-radius: 8px;
+    color: #65746D;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.header nav a:hover {
+    color: var(--brand-forest);
+    background: var(--brand-green-pale);
+}
+
+/* Page rhythm */
+.main {
+    min-height: calc(100vh - 76px);
+    padding: 42px 22px;
+}
+
+.events-section,
+.event-tab-panel {
+    width: min(100%, 1080px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.events-heading {
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.events-heading h1 {
+    color: var(--brand-forest-dark);
+    font-size: clamp(27px, 3.4vw, 35px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 5px 0 7px;
+}
+
+.events-heading p,
+.description {
+    color: var(--brand-muted);
+}
+
+/* Welcome: restrained brand panel */
+.welcome {
+    max-width: 660px;
+    padding: clamp(30px, 5vw, 48px);
+    border: 1px solid #E9EAE3;
+    border-radius: 22px;
+    background: var(--brand-white);
+    box-shadow: var(--brand-shadow);
+}
+
+.eyebrow {
+    color: var(--brand-terracotta);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.15px;
+    margin-bottom: 15px;
+}
+
+.welcome h1 {
+    color: var(--brand-forest-dark);
+    font-size: clamp(36px, 5vw, 55px);
+    line-height: 1.16;
+    font-weight: 900;
+    margin-bottom: 17px;
+}
+
+.description {
+    max-width: 540px;
+    font-size: 17px;
+    line-height: 1.85;
+    margin-bottom: 25px;
+}
+
+/* Buttons: compact, crisp, no dramatic movement */
+.primary-button {
+    padding: 11px 22px;
+    min-height: 43px;
+    color: #fff;
+    background: var(--brand-forest);
+    border: 1px solid var(--brand-forest);
+    border-radius: 9px;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background: var(--brand-forest-dark);
+    border-color: var(--brand-forest-dark);
+    box-shadow: 0 3px 9px rgba(23, 72, 61, .13);
+    filter: none;
+    transform: none;
+}
+
+.primary-button::before {
+    display: none;
+}
+
+.primary-button:active {
+    background: #0D3029;
+}
+
+.secondary-button {
+    min-height: 38px;
+    padding: 8px 14px;
+    color: var(--brand-forest);
+    background: #fff;
+    border: 1px solid #DCE4DE;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.secondary-button:hover:not(:disabled) {
+    color: var(--brand-forest-dark);
+    background: var(--brand-green-pale);
+    border-color: #C8D9D0;
+    box-shadow: none;
+    transform: none;
+}
+
+.secondary-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+/* Forms and login */
+.auth-card {
+    max-width: 420px;
+    padding: 28px;
+    border: 1px solid var(--brand-line);
+    border-radius: 17px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 0 10px;
+    margin-bottom: 23px;
+    border-bottom: 1px solid var(--brand-line);
+}
+
+.tab {
+    flex: 1;
+    padding: 9px 12px;
+    color: var(--brand-muted);
+    background: #F7F8F5;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tab:hover {
+    color: var(--brand-forest);
+    background: var(--brand-green-pale);
+}
+
+.tab.active {
+    color: #fff;
+    background: var(--brand-forest);
+    border-color: var(--brand-forest);
+    box-shadow: none;
+}
+
+.auth-card h1 {
+    color: var(--brand-forest-dark);
+    font-family: 'Rubik', sans-serif;
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.auth-card p {
+    color: var(--brand-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.auth-card label,
+.budget-section label {
+    display: block;
+    color: #465A51;
+    font-size: 13px;
+    font-weight: 700;
+    margin: 13px 0 6px;
+}
+
+.auth-card input,
+.budget-section input,
+.budget-section select,
+#createEventFormContainer textarea,
+#createEventFormContainer select,
+#addItemFormContainer input,
+#addItemFormContainer select,
+#addItemFormContainer textarea {
+    width: 100%;
+    min-height: 43px;
+    padding: 10px 12px;
+    color: var(--brand-ink);
+    background: #FDFEFC;
+    border: 1px solid #DFE5DF;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.auth-card input:focus,
+.budget-section input:focus,
+.budget-section select:focus,
+#createEventFormContainer textarea:focus,
+#createEventFormContainer select:focus,
+#addItemFormContainer input:focus,
+#addItemFormContainer select:focus,
+#addItemFormContainer textarea:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--brand-green);
+    box-shadow: 0 0 0 3px rgba(57, 122, 103, .10);
+}
+
+.auth-card .primary-button {
+    width: 100%;
+    margin-top: 21px;
+}
+
+#message {
+    margin-top: 13px;
+    text-align: center;
+    color: var(--brand-terracotta);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Event cards — independent cards with visible breathing room */
+.events-grid {
+    grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+    gap: 17px;
+}
+
+.event-card {
+    padding: 21px;
+    border: 1px solid #E8EBE5;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+    overflow: hidden;
+}
+
+.event-card::before {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 3px;
+    margin-bottom: 13px;
+    border-radius: 3px;
+    background: var(--brand-champagne);
+}
+
+.event-card:hover {
+    border-color: #D6E1D9;
+    box-shadow: var(--brand-shadow-hover);
+    transform: none;
+}
+
+.event-card h2 {
+    color: var(--brand-forest);
+    font-family: 'Rubik', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.event-card p {
+    color: var(--brand-muted);
+    font-size: 14px;
+    margin-bottom: 9px;
+}
+
+.event-card span {
+    color: #A18B64;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pagination {
+    gap: 12px;
+    margin-top: 27px;
+}
+
+#eventsMessage {
+    color: var(--brand-muted);
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+/* Create event form */
+#createEventFormContainer {
+    max-width: 570px;
+    margin: 0 auto 26px;
+    padding: 25px;
+    border: 1px solid var(--brand-line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+#createEventFormContainer h2 {
+    color: var(--brand-forest);
+    font-family: 'Rubik', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 14px;
+}
+
+#createEventFormContainer textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+#createEventFormContainer button {
+    margin-top: 15px;
+}
+
+#createEventFormContainer .secondary-button {
+    margin-right: 8px;
+}
+
+/* Event detail masthead — a single branded surface */
+.event-top-card {
+    max-width: 1080px;
+    margin: 22px auto;
+    padding: 29px 32px;
+    border: 0;
+    border-radius: 18px;
+    color: #fff;
+    background: var(--brand-forest);
+    box-shadow: 0 8px 22px rgba(23, 72, 61, .11);
+}
+
+.event-top-card::after {
+    display: none;
+}
+
+.event-top-card h1 {
+    color: #fff;
+    font-family: 'Rubik', sans-serif;
+    font-size: clamp(25px, 3vw, 32px);
+    font-weight: 800;
+    margin: 0 0 9px;
+}
+
+.event-top-card > p {
+    color: rgba(255,255,255,.78);
+    font-size: 14px;
+    margin-bottom: 17px;
+}
+
+.event-top-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    color: rgba(255,255,255,.88);
+    font-size: 13px;
+}
+
+.event-role {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 5px 11px;
+    border: 1px solid rgba(245,240,230,.28);
+    border-radius: 7px;
+    color: #F4E8D0;
+    background: rgba(255,255,255,.08);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Tabs are distinct compact controls, not one joined segmented block */
+.event-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    max-width: 1080px;
+    margin: 21px auto;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+}
+
+.event-tab {
+    flex: 0 1 auto;
+    padding: 9px 16px;
+    border: 1px solid #E2E7E1;
+    border-radius: 9px;
+    color: #65756D;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.event-tab:hover {
+    color: var(--brand-forest);
+    background: var(--brand-green-pale);
+    border-color: #D4E1D8;
+}
+
+.event-tab.active {
+    color: #fff;
+    background: var(--brand-forest);
+    border-color: var(--brand-forest);
+    box-shadow: none;
+}
+
+.event-tab-panel {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/* Budget — separate stat tiles with consistent proportions */
+.budget-section {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.budget-summary {
+    padding: 25px;
+    border: 1px solid var(--brand-line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+.budget-summary h2 {
+    color: var(--brand-forest);
+    font-family: 'Rubik', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0 0 18px;
+}
+
+.budget-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.budget-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 94px;
+    padding: 16px;
+    border: 1px solid #E9ECE6;
+    border-radius: 11px;
+    background: #F8F9F6;
+}
+
+.budget-stat span {
+    color: var(--brand-muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.budget-stat strong {
+    color: var(--brand-forest);
+    font-family: 'Rubik', sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.budget-share {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 14px;
+    padding: 16px 18px;
+    border: 1px solid #ECE3D2;
+    border-radius: 11px;
+    background: var(--brand-champagne-pale);
+}
+
+.budget-share span,
+.budget-share small {
+    color: #8B7958;
+    font-size: 12px;
+}
+
+.budget-share strong {
+    color: #80643A;
+    font-family: 'Rubik', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.budget-section .auth-card {
+    max-width: none;
+    margin: 0;
+    padding: 24px;
+    border: 1px solid var(--brand-line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+.budget-section .auth-card h3 {
+    color: var(--brand-forest);
+    font-family: 'Rubik', sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    margin: 0 0 17px;
+}
+
+.budget-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.budget-section .primary-button {
+    width: 100%;
+    min-height: 43px;
+    margin-top: 10px;
+}
+
+/* Expense and contribution entries */
+#expensesList,
+#contributionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#expensesList .item-card,
+#contributionsList .item-card {
+    padding: 15px 17px;
+    border: 1px solid #E8EBE5;
+    border-radius: 11px;
+    background: #fff;
+    box-shadow: none;
+}
+
+#expensesList .item-card:hover,
+#contributionsList .item-card:hover {
+    border-color: #D8E2DA;
+    box-shadow: var(--brand-shadow);
+    transform: none;
+}
+
+#expensesList .item-card h4,
+#contributionsList .item-card h4 {
+    color: var(--brand-forest);
+    font-size: 15px;
+    font-weight: 800;
+    margin: 0 0 7px;
+}
+
+#expensesList .item-card p,
+#contributionsList .item-card p {
+    color: var(--brand-muted);
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+#expensesList .item-card button,
+#contributionsList .item-card button {
+    margin-top: 8px;
+    margin-left: 6px;
+}
+
+/* Items */
+.items-section {
+    margin-top: 28px;
+}
+
+.items-heading {
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 15px;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.item-card {
+    padding: 19px;
+    border: 1px solid #E8EBE5;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+.item-card:hover {
+    border-color: #D8E2DA;
+    box-shadow: var(--brand-shadow-hover);
+    transform: none;
+}
+
+.item-card h3 {
+    color: var(--brand-forest);
+    font-family: 'Rubik', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.item-card p {
+    color: var(--brand-muted);
+    font-size: 13px;
+    margin: 7px 0;
+}
+
+.claim-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.claim-controls input {
+    width: 75px;
+    min-width: 0;
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid #DFE5DF;
+    border-radius: 8px;
+    background: #FDFEFC;
+    font-size: 13px;
+}
+
+.claim-controls button {
+    flex: 1;
+}
+
+.claim-controls button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+/* Members */
+#eventMembersSection {
+    margin-top: 23px;
+    padding: 21px;
+    border: 1px solid var(--brand-line);
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+#eventMembersList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+    gap: 11px;
+    margin-top: 14px;
+}
+
+#eventMembersList .item-card {
+    padding: 14px;
+    border-radius: 10px;
+    background: #F9FAF7;
+    box-shadow: none;
+}
+
+#eventMembersList h4 {
+    color: var(--brand-forest);
+    font-size: 14px;
+    font-weight: 800;
+    margin: 0 0 6px;
+}
+
+#eventMembersList p {
+    color: var(--brand-muted);
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+/* Details and interaction states */
+.event-details-info {
+    margin-top: 20px;
+    line-height: 1.9;
+}
+
+.event-details-info p {
+    padding: 9px 0;
+    color: #64746C;
+    border-bottom: 1px solid var(--brand-line);
+    font-size: 14px;
+}
+
+#backToEventsButton {
+    margin-bottom: 15px;
+}
+
+.event-card:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--brand-terracotta);
+    outline-offset: 2px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #A4ADA7;
+}
+
+::selection {
+    color: #fff;
+    background: var(--brand-forest);
+}
+
+/* Responsive: preserve spacing on narrow screens */
+@media (max-width: 700px) {
+    .header {
+        position: relative;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 13px 17px;
+        gap: 10px;
+    }
+
+    .header nav {
+        width: 100%;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .header nav a {
+        padding: 6px 9px;
+        font-size: 13px;
+    }
+
+    .events-heading {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .event-top-card {
+        padding: 23px;
+    }
+
+    .event-top-info {
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .event-tabs {
+        gap: 7px;
+    }
+
+    .event-tab {
+        flex: 0 1 auto;
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+    .budget-summary,
+    .budget-section .auth-card {
+        padding: 19px;
+    }
+
+    .budget-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .budget-stat {
+        min-height: 86px;
+        padding: 12px;
+    }
+
+    .budget-stat strong {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .main {
+        padding: 25px 14px;
+    }
+
+    .welcome {
+        padding: 26px 20px;
+    }
+
+    .welcome h1 {
+        font-size: 35px;
+    }
+
+    .events-grid,
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .budget-summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .claim-controls {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: .01ms !important;
+    }
+}
+
+/* ==========================================================
+   SPACING FIX — prevent sections/cards from touching
+   Dedicated breathing room between independent surfaces
+========================================================== */
+
+/* Keep the join/login panel visually separate from the event list */
+.events-section .auth-card {
+    margin-bottom: 28px;
+}
+
+/* Explicit grid gutters in both directions */
+.events-grid,
+.items-grid {
+    column-gap: 22px;
+    row-gap: 22px;
+}
+
+/* Separate the event grid from neighboring content */
+.events-section .events-grid {
+    margin-top: 24px;
+}
+
+/* A little breathing room between consecutive sections */
+.events-section > * + *,
+.event-tab-panel > * + * {
+    margin-top: 24px;
+}
+
+/* Never let adjacent cards visually merge */
+.event-card,
+.item-card,
+.budget-summary,
+.budget-section .auth-card,
+#createEventFormContainer,
+#eventMembersSection {
+    position: relative;
+    isolation: isolate;
+    margin-bottom: 0;
+}
+
+/* Preserve the dedicated gap when cards wrap to another row */
+.events-grid,
+.items-grid,
+#eventMembersList {
+    display: grid;
+    gap: 22px;
+}
+
+/* Mobile: keep separation without wasting screen space */
+@media (max-width: 700px) {
+    .events-section .auth-card {
+        margin-bottom: 22px;
+    }
+
+    .events-grid,
+    .items-grid,
+    #eventMembersList {
+        gap: 15px;
+    }
+
+    .events-section .events-grid {
+        margin-top: 20px;
+    }
+}
+
+/* Gatherly event details: detached metadata and admin panels */
+.event-top-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 0;
+    padding: 28px 32px !important;
+    margin-bottom: 16px !important;
+}
+
+.event-top-card h1,
+.event-top-card > p {
+    max-width: 760px;
+}
+
+.event-top-card .event-role {
+    margin-top: 2px;
+}
+
+.event-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 8px;
+}
+
+.event-meta-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 auto 20px;
+    width: 100%;
+}
+
+.event-meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+    padding: 14px 17px;
+    border: 1px solid #E5EAE4;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(28, 54, 45, .035);
+}
+
+.event-meta-label {
+    color: #89958E;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.event-meta-item strong {
+    color: #17483D;
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.event-admin-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    align-items: start;
+    gap: 16px;
+    margin: 0 0 20px;
+}
+
+.event-admin-area:empty {
+    display: none;
+}
+
+.event-admin-area .auth-card {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 8px;
+}
+
+#eventMembersSection {
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .event-top-card {
+        padding: 22px !important;
+    }
+
+    .event-meta-strip {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .event-admin-area {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Gatherly — custom invitation expiration selector */
+#invitationExpiration {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: inline-block;
+    width: 132px;
+    min-height: 42px;
+    padding: 8px 14px 8px 36px;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #17483D;
+    background-color: #F8FAF7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23397A67' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+    background-size: 15px;
+    border: 1px solid #D9E4DC;
+    border-radius: 9px;
+    box-shadow: 0 2px 6px rgba(23, 72, 61, .035);
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+#invitationExpiration:hover {
+    background-color: #FFFFFF;
+    border-color: #AFC8B9;
+}
+
+#invitationExpiration:focus {
+    outline: none;
+    border-color: #397A67;
+    box-shadow: 0 0 0 3px rgba(57, 122, 103, .11);
+}
+
+#invitationExpiration option {
+    font-family: 'Heebo', sans-serif;
+    color: #263B35;
+    background: #FFFFFF;
+    padding: 8px;
+}
+/* Gatherly — refined item-list cards and quantity controls
+   Add this at the VERY END of css/style.css
+*/
+
+/* Items area heading */
+#itemsSection .items-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 18px;
+}
+
+#itemsSection .items-heading h2 {
+    margin: 0;
+    color: #173F35;
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+/* List layout: clear space between independent cards */
+#itemsList.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 18px;
+    align-items: stretch;
+    margin-top: 18px;
+}
+
+/* Individual item card */
+#itemsList .item-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid #E5EAE4;
+    border-radius: 15px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(25, 57, 45, .045);
+    text-align: right;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#itemsList .item-card:hover {
+    border-color: #D4E1D8;
+    box-shadow: 0 7px 22px rgba(25, 57, 45, .07);
+}
+
+/* Item name and description */
+#itemsList .item-card h3,
+#itemsList .item-card h4 {
+    margin: 0 0 3px;
+    color: #17483D;
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+#itemsList .item-card p {
+    margin: 0;
+    color: #748179;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* Highlight quantities/cost details without oversized text */
+#itemsList .item-card strong {
+    color: #3D6253;
+    font-weight: 700;
+}
+
+/* The claim/update row: compact controls instead of stretched native buttons */
+#itemsList .claim-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+#itemsList .claim-controls input {
+    flex: 0 0 76px;
+    width: 76px;
+    min-width: 76px;
+    min-height: 42px;
+    padding: 8px 10px;
+    color: #17483D;
+    background: #FAFCF9;
+    border: 1px solid #DCE5DE;
+    border-radius: 9px;
+    font-family: 'Heebo', sans-serif;
+}
+
+/* Gatherly — compact two-column budget workspace
+   Add at the VERY END of css/style.css
+*/
+
+/* Summary remains full width; the two workflows sit side by side */
+#budgetSection,
+.budget-section {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+        "summary summary"
+        "expense-form contribution-form"
+        "expense-list contribution-list";
+    align-items: start;
+    gap: 18px;
+}
+
+/* Full-width financial overview */
+#budgetSection > .budget-summary,
+.budget-section > .budget-summary {
+    grid-area: summary;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Expense workflow — form above its own list */
+.budget-section > .auth-card:has(#addExpenseForm) {
+    grid-area: expense-form;
+}
+
+.budget-section > .auth-card:has(#expensesList) {
+    grid-area: expense-list;
+}
+
+/* Contribution workflow — form above its own list */
+.budget-section > .auth-card:has(#addContributionForm) {
+    grid-area: contribution-form;
+}
+
+.budget-section > .auth-card:has(#contributionsList) {
+    grid-area: contribution-list;
+}
+
+/* Consistent compact panels */
+.budget-section > .auth-card {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 21px;
+    border: 1px solid #E5EAE4;
+    border-radius: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 15px rgba(25, 57, 45, .045);
+}
+
+.budget-section > .auth-card h3 {
+    margin: 0 0 15px;
+    color: #17483D;
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.budget-section > .auth-card form {
+    gap: 9px;
+}
+
+.budget-section > .auth-card label {
+    margin: 8px 0 3px;
+    font-size: 13px;
+}
+
+.budget-section > .auth-card input,
+.budget-section > .auth-card select {
+    min-height: 42px;
+    font-size: 14px;
+}
+
+.budget-section > .auth-card .primary-button {
+    min-height: 42px;
+    margin-top: 9px;
+    font-size: 14px;
+}
+
+/* Lists remain inside their matching column */
+#expensesList,
+#contributionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+#expensesList .item-card,
+#contributionsList .item-card {
+    padding: 14px 16px;
+}
+
+/* Gatherly — true independent two-column budget layout
+   Pair each form with its own list so the columns do not share row heights.
+   Use together with gatherly-budget-columns.html
+*/
+
+#budgetSection.budget-section {
+    display: flex !important;
+    flex-direction: column;
+    gap: 18px;
+    align-items: stretch;
+}
+
+#budgetSection > .budget-summary {
+    width: 100%;
+    margin: 0;
+}
+
+#budgetSection .budget-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 18px;
+    width: 100%;
+}
+
+#budgetSection .budget-column {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    min-width: 0;
+}
+
+/* Each panel is sized by its own content, not by the neighboring column */
+#budgetSection .budget-column > .auth-card {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 21px;
+    border: 1px solid #E5EAE4;
+    border-radius: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 15px rgba(25, 57, 45, .045);
+}
+
+#budgetSection .budget-column > .auth-card h3 {
+    margin: 0 0 15px;
+    color: #17483D;
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+#budgetSection .budget-column form {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+#budgetSection .budget-column label {
+    margin: 8px 0 3px;
+    color: #465A51;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#budgetSection .budget-column input,
+#budgetSection .budget-column select {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #DFE5DF;
+    border-radius: 8px;
+    background: #FDFEFC;
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+}
+
+#budgetSection .budget-column .primary-button {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 9px;
+    font-size: 14px;
+}
+
+/* Entries inside each list */
+#expensesList,
+#contributionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+#expensesList .item-card,
+#contributionsList .item-card {
+    padding: 14px 16px;
+    border: 1px solid #E8EBE5;
+    border-radius: 11px;
+    background: #FAFBF9;
+    box-shadow: none;
+}
+
+#expensesList .item-card h4,
+#contributionsList .item-card h4 {
+    margin: 0 0 7px;
+    color: #17483D;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+#expensesList .item-card p,
+#contributionsList .item-card p {
+    margin: 5px 0;
+    color: #748179;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+    #budgetSection .budget-columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    #budgetSection .budget-column {
+        gap: 13px;
+    }
+
+    #budgetSection .budget-column > .auth-card {
+        padding: 18px;
+    }
+}
