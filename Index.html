@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 
@@ -34,7 +33,21 @@
                 <input id="loginEmail" type="email" required>
 
                 <label for="loginPassword">סיסמה</label>
-                <input id="loginPassword" type="password" required>
+                <div class="password-wrapper">
+                    <input id="loginPassword" type="password" required>
+                    <button type="button" class="toggle-password"
+                        data-password-toggle="loginPassword"
+                        aria-label="הצגת סיסמה" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" width="20" height="20"
+                            fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M3 3l18 18" class="eye-slash"/>
+                        </svg>
+                    </button>
+                </div>
 
                 <button class="primary-button" type="submit">התחברות</button>
             </form>
@@ -50,7 +63,27 @@
                 <input id="registerEmail" type="email" required>
 
                 <label for="registerPassword">סיסמה</label>
-                <input id="registerPassword" type="password" required>
+                <div class="password-wrapper">
+                   <input
+    id="registerPassword"
+    type="password"
+    minlength="12"
+    maxlength="64"
+    required
+>
+                    <button type="button" class="toggle-password"
+                        data-password-toggle="registerPassword"
+                        aria-label="הצגת סיסמה" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" width="20" height="20"
+                            fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M3 3l18 18" class="eye-slash"/>
+                        </svg>
+                    </button>
+                </div>
 
                 <button class="primary-button" type="submit">יצירת חשבון</button>
             </form>
@@ -80,12 +113,7 @@
 
                 <form id="joinEventForm">
                     <label for="invitationToken">קוד הזמנה</label>
-                    <input
-                        id="invitationToken"
-                        type="text"
-                        placeholder="הדביקי כאן את קוד ההזמנה"
-                        required
-                    >
+                    <input id="invitationToken" type="text" placeholder="הדביקי כאן את קוד ההזמנה" required>
 
                     <button type="submit" class="primary-button">
                         הצטרפות לאירוע
@@ -238,10 +266,10 @@
             </div>
 
             <div id="eventMembersSection" class="auth-card">
-    <h3>משתתפי האירוע</h3>
-    <div id="eventMembersMessage"></div>
-    <div id="eventMembersList"></div>
-</div>
+                <h3>משתתפי האירוע</h3>
+                <div id="eventMembersMessage"></div>
+                <div id="eventMembersList"></div>
+            </div>
 
             <!-- ניווט בין אזורי האירוע -->
             <nav class="event-tabs">
@@ -300,34 +328,18 @@
                             <textarea id="itemDescription" rows="3"></textarea>
 
                             <label for="itemQuantity">כמות נדרשת</label>
-                            <input
-                                id="itemQuantity"
-                                type="number"
-                                min="1"
-                                step="1"
-                                value="1"
-                                required
-                            >
+                            <input id="itemQuantity" type="number" min="1" step="1" value="1" required>
 
                             <label for="itemEstimatedCost">
                                 עלות משוערת (₪)
                             </label>
-                            <input
-                                id="itemEstimatedCost"
-                                type="number"
-                                min="0"
-                                step="0.01"
-                            >
+                            <input id="itemEstimatedCost" type="number" min="0" step="0.01">
 
                             <button type="submit" class="primary-button">
                                 שמירת פריט
                             </button>
 
-                            <button
-                                type="button"
-                                id="cancelAddItemButton"
-                                class="secondary-button"
-                            >
+                            <button type="button" id="cancelAddItemButton" class="secondary-button">
                                 ביטול
                             </button>
 
@@ -382,90 +394,74 @@
 
                     <div class="budget-columns">
                         <div class="budget-column budget-column-expenses">
-                    <!-- הוספת הוצאה -->
-                    <div class="auth-card">
-                        <h3>רישום הוצאה חדשה</h3>
+                            <!-- הוספת הוצאה -->
+                            <div class="auth-card">
+                                <h3>רישום הוצאה חדשה</h3>
 
-                        <form id="addExpenseForm">
+                                <form id="addExpenseForm">
 
-                            <label for="expenseItemId">
-                                עבור איזה פריט שילמת?
-                            </label>
+                                    <label for="expenseItemId">
+                                        עבור איזה פריט שילמת?
+                                    </label>
 
-                            <select id="expenseItemId">
-                                <option value="">הוצאה כללית (ללא פריט)</option>
-                            </select>
+                                    <select id="expenseItemId">
+                                        <option value="">הוצאה כללית (ללא פריט)</option>
+                                    </select>
 
-                            <label for="expenseDescription">
-                                על מה שילמת?
-                            </label>
+                                    <label for="expenseDescription">
+                                        על מה שילמת?
+                                    </label>
 
-                            <input
-                                id="expenseDescription"
-                                type="text"
-                                placeholder="הזיני תיאור קצר של ההוצאה"
-                                required
-                            >
+                                    <input id="expenseDescription" type="text" placeholder="הזיני תיאור קצר של ההוצאה"
+                                        required>
 
-                            <label for="expenseAmount">
-                                כמה שילמת בפועל? (₪)
-                            </label>
+                                    <label for="expenseAmount">
+                                        כמה שילמת בפועל? (₪)
+                                    </label>
 
-                            <input
-                                id="expenseAmount"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                required
-                            >
+                                    <input id="expenseAmount" type="number" min="0.01" step="0.01" required>
 
-                            <button type="submit" class="primary-button">
-                                שמירת הוצאה
-                            </button>
+                                    <button type="submit" class="primary-button">
+                                        שמירת הוצאה
+                                    </button>
 
-                        </form>
-                    </div>
+                                </form>
+                            </div>
 
-                    <!-- רשימת הוצאות -->
-                    <div class="auth-card">
-                        <h3>הוצאות האירוע</h3>
-                        <div id="expensesMessage"></div>
-                        <div id="expensesList"></div>
-                    </div>
+                            <!-- רשימת הוצאות -->
+                            <div class="auth-card">
+                                <h3>הוצאות האירוע</h3>
+                                <div id="expensesMessage"></div>
+                                <div id="expensesList"></div>
+                            </div>
 
                         </div>
                         <div class="budget-column budget-column-contributions">
-                    <!-- הפקדה לקופה -->
-                    <div class="auth-card">
-                        <h3>הפקדת כסף לקופה המשותפת</h3>
+                            <!-- הפקדה לקופה -->
+                            <div class="auth-card">
+                                <h3>הפקדת כסף לקופה המשותפת</h3>
 
-                        <form id="addContributionForm">
+                                <form id="addContributionForm">
 
-                            <label for="contributionAmount">
-                                כמה כסף את מפקידה? (₪)
-                            </label>
+                                    <label for="contributionAmount">
+                                        כמה כסף את מפקידה? (₪)
+                                    </label>
 
-                            <input
-                                id="contributionAmount"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                required
-                            >
+                                    <input id="contributionAmount" type="number" min="0.01" step="0.01" required>
 
-                            <button type="submit" class="primary-button">
-                                הפקדת כסף לקופה
-                            </button>
+                                    <button type="submit" class="primary-button">
+                                        הפקדת כסף לקופה
+                                    </button>
 
-                        </form>
-                    </div>
+                                </form>
+                            </div>
 
-                    <!-- רשימת הפקדות -->
-                    <div class="auth-card">
-                        <h3>הפקדות המשתתפים</h3>
-                        <div id="contributionsMessage"></div>
-                        <div id="contributionsList"></div>
-                    </div>
+                            <!-- רשימת הפקדות -->
+                            <div class="auth-card">
+                                <h3>הפקדות המשתתפים</h3>
+                                <div id="contributionsMessage"></div>
+                                <div id="contributionsList"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -480,8 +476,18 @@
     <script src="js/app.js"></script>
 
 </body>
+
 </html>
 
 <!-- Injection By NetFree -->
-<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A1%D7%A0%D7%9F%20%D7%AA%D7%95%D7%9B%D7%9F%20%D7%A9%D7%99%D7%93%D7%95%D7%A2%20%D7%9B%D7%90%D7%99%D7%A9%D7%99%20%D7%90%D7%95%20%D7%A4%D7%A8%D7%98%D7%99%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Filter%20content%20that%20is%20known%20as%20personal%20or%20private%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async id="netfree-note-site"
+    jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A1%D7%A0%D7%9F%20%D7%AA%D7%95%D7%9B%D7%9F%20%D7%A9%D7%99%D7%93%D7%95%D7%A2%20%D7%9B%D7%90%D7%99%D7%A9%D7%99%20%D7%90%D7%95%20%D7%A4%D7%A8%D7%98%D7%99%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Filter%20content%20that%20is%20known%20as%20personal%20or%20private%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script>
+<script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async></script>
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%D7%99%D7%9D%20%D7%A4%D7%A8%D7%98%D7%99%D7%99%D7%9D%2C%20%D7%91%D7%9E%D7%A7%D7%95%D7%9D%20%D7%9C%D7%97%D7%A1%D7%95%D7%9D%20%D7%90%D7%95%D7%AA%D7%9F%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Allow%20images%20on%20private%20sites%20to%20be%20sent%20for%20review%2C%20instead%20of%20blocking%20them%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>
+
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%D7%99%D7%9D%20%D7%A4%D7%A8%D7%98%D7%99%D7%99%D7%9D%2C%20%D7%91%D7%9E%D7%A7%D7%95%D7%9D%20%D7%9C%D7%97%D7%A1%D7%95%D7%9D%20%D7%90%D7%95%D7%AA%D7%9F%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Allow%20images%20on%20private%20sites%20to%20be%20sent%20for%20review%2C%20instead%20of%20blocking%20them%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
 <script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>

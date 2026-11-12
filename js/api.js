@@ -37,14 +37,33 @@ async function apiRequest(endpoint, method, data = null, requiresAuth = false) {
     }
 
     if (!response.ok) {
-        const message =
-            typeof result === "string"
-                ? result
-                : result?.message ||
+        let message = "אירעה שגיאה, נסי שוב.";
+
+        if (typeof result === "string") {
+            message = result;
+        }
+        else if (result?.errors) {
+            const errors = Object.values(result.errors).flat();
+
+            message = errors.join(" ");
+
+            if (errors.some(error =>
+                error.includes("12") ||
+                error.toLowerCase().includes("minimum length")
+            )) {
+                message = "הסיסמה חייבת להכיל לפחות 12 תווים.";
+            }
+        }
+        else {
+            message =
+                result?.detail ||
+                result?.message ||
                 result?.Message ||
                 result?.title ||
                 result?.Title ||
-                "אירעה שגיאה";
+                message;
+        }
+
         throw new Error(message);
     }
 

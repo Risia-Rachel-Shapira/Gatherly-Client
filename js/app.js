@@ -133,6 +133,8 @@ registerTab.addEventListener("click", showRegister);
 
 
 // הרשמה
+
+// הרשמה
 registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -148,12 +150,26 @@ registerForm.addEventListener("submit", async (event) => {
     try {
         showMessage("יוצר חשבון...");
 
-        await registerUser(fullName, email, password);
+        // יצירת משתמש חדש
+        const result = await registerUser(fullName, email, password);
 
+        // קבלת פרטי ההתחברות מהשרת
+        const token = result.token || result.Token;
+        const user = result.user || result.User;
+
+        if (!token || !user) {
+            throw new Error("לא התקבלו פרטי התחברות מהשרת.");
+        }
+
+        // שמירת ההתחברות בדפדפן
+        localStorage.setItem("gatherlyToken", token);
+        localStorage.setItem("gatherlyUser", JSON.stringify(user));
+
+        // איפוס טופס ההרשמה
         registerForm.reset();
-        showLogin();
 
-        showMessage("ההרשמה הצליחה! אפשר להתחבר.");
+        // כניסה אוטומטית לאתר
+        await showEventsScreen();
 
     } catch (error) {
         showMessage(error.message, true);
@@ -440,7 +456,7 @@ async function showEventDetails(eventId) {
             eventMembersSection.classList.remove("hidden");
         }
 
-        await loadEventMembers(eventId);
+        await loadEventMembers(eventId, event);
         console.log("עומדת לטעון משתתפים לאירוע:", eventId);
         // זיהוי תפקיד המשתמש באירוע
         const currentUserId = getCurrentUserId();
@@ -1759,9 +1775,8 @@ if (joinEventForm) {
 // טעינת משתתפי האירוע
 // =====================================
 
-async function loadEventMembers(eventId) {
-    console.log("loadEventMembers הופעלה!", eventId);
-console.log("eventMembersList:", eventMembersList);
+
+async function loadEventMembers(eventId, event) {
     if (!eventMembersList || !eventMembersMessage) return;
 
     eventMembersList.innerHTML = "";
@@ -1770,15 +1785,52 @@ console.log("eventMembersList:", eventMembersList);
     try {
         const members = await getEventMembers(eventId);
 
-        eventMembersMessage.textContent = "";
+        // פרטי המארגן מתוך פרטי האירוע
+        const organizerId = Number(
+            event.organizerId ?? event.OrganizerId
+        );
 
-        if (!members || members.length === 0) {
+        const organizerName =
+            event.organizerName ??
+            event.OrganizerName ??
+            "מארגן האירוע";
+
+        // הצגת המארגן
+        const organizerCard = document.createElement("div");
+        organizerCard.className = "item-card organizer-card";
+
+        const organizerNameElement = document.createElement("h4");
+        organizerNameElement.textContent = `👑 ${organizerName}`;
+
+        const organizerRole = document.createElement("p");
+        organizerRole.textContent = "מנהל האירוע";
+
+        organizerCard.append(
+            organizerNameElement,
+            organizerRole
+        );
+
+        eventMembersList.appendChild(organizerCard);
+
+        // מניעת הצגה כפולה של המארגן
+        const otherMembers = (members || []).filter(member => {
+            const memberUserId = Number(
+                member.userId ?? member.UserId
+            );
+
+            return memberUserId !== organizerId;
+        });
+
+        if (otherMembers.length === 0) {
             eventMembersMessage.textContent =
-                "עדיין אין משתתפים באירוע.";
+                "עדיין אין משתתפים נוספים באירוע.";
             return;
         }
 
-        members.forEach(member => {
+        eventMembersMessage.textContent = "";
+
+        // הצגת שאר המשתתפים
+        otherMembers.forEach(member => {
             const card = document.createElement("div");
             card.className = "item-card";
 
@@ -1788,22 +1840,15 @@ console.log("eventMembersList:", eventMembersList);
                 member.UserName ??
                 member.fullName ??
                 member.FullName ??
-                member.name ??
-                member.Name ??
                 "משתתף";
 
             const role = document.createElement("p");
-            const memberRole = member.role ?? member.Role;
+            role.textContent = "משתתף";
 
-            role.textContent =
-                memberRole === "Organizer"
-                    ? "מארגנת האירוע"
-                    : "משתתף";
+            const joinedAt =
+                member.joinedAt ?? member.JoinedAt;
 
-            const joinedAt = member.joinedAt ?? member.JoinedAt;
-
-            card.appendChild(name);
-            card.appendChild(role);
+            card.append(name, role);
 
             if (joinedAt) {
                 const date = document.createElement("p");
@@ -1821,3 +1866,42 @@ console.log("eventMembersList:", eventMembersList);
             `לא ניתן לטעון את המשתתפים: ${error.message}`;
     }
 }
+
+
+// הצגה והסתרה של סיסמה באמצעות סמל עין בלבד
+document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+        const inputId = button.dataset.passwordToggle;
+        const passwordInput = document.getElementById(inputId);
+
+        if (!passwordInput) return;
+
+        const shouldShow = passwordInput.type === "password";
+        passwordInput.type = shouldShow ? "text" : "password";
+
+        button.setAttribute("aria-pressed", String(shouldShow));
+        button.setAttribute(
+            "aria-label",
+            shouldShow ? "הסתרת סיסמה" : "הצגת סיסמה"
+        );
+
+        const svg = button.querySelector("svg");
+        if (!svg) return;
+
+        const slash = svg.querySelector(".eye-slash");
+
+        if (shouldShow && slash) {
+            slash.remove();
+        } else if (!shouldShow && !slash) {
+            const line = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path"
+            );
+
+            line.setAttribute("d", "M3 3l18 18");
+            line.setAttribute("class", "eye-slash");
+
+            svg.appendChild(line);
+        }
+    });
+});
