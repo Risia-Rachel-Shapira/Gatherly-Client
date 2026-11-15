@@ -286,19 +286,6 @@ async function deleteEvent(eventId) {
 // Invitations - מערכת הזמנות
 // ===============================
 
-// יצירת קוד הזמנה לאירוע
-async function createInvitation(eventId, expiresInDays = 7) {
-    return apiRequest(
-        "/Invitations",
-        "POST",
-        {
-            eventId,
-            expiresInDays
-        },
-        true
-    );
-}
-
 async function createInvitation(eventId, expiresInDays = 7) {
     return apiRequest(
         "/Invitations",
