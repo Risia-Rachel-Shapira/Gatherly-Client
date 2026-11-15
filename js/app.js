@@ -457,7 +457,6 @@ async function showEventDetails(eventId) {
         }
 
         await loadEventMembers(eventId, event);
-        console.log("עומדת לטעון משתתפים לאירוע:", eventId);
         // זיהוי תפקיד המשתמש באירוע
         const currentUserId = getCurrentUserId();
 
