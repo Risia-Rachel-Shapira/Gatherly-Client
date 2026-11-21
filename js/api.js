@@ -1,5 +1,5 @@
 
-const API_BASE_URL = "https://gatherly-server-gk3y.onrender.com/api";
+const API_BASE_URL = "http://localhost:5141/api";
 
 async function apiRequest(endpoint, method, data = null, requiresAuth = false) {
     const headers = {
@@ -36,6 +36,22 @@ async function apiRequest(endpoint, method, data = null, requiresAuth = false) {
         result = responseText;
     }
 
+    // 409 - התנגשות: הפריט נתפס במקביל על ידי משתמש אחר
+    if (response.status === 409) {
+        const conflictMessage =
+            (typeof result === "string" && result.trim()) ||
+            result?.detail ||
+            result?.message ||
+            result?.Message ||
+            result?.title ||
+            result?.Title ||
+            "הפריט נתפס על ידי משתמש אחר. נסי שוב.";
+
+        const conflictError = new Error(conflictMessage);
+        conflictError.status = 409;
+        throw conflictError;
+    }
+
     if (!response.ok) {
         let message = "אירעה שגיאה, נסי שוב.";
 
@@ -64,7 +80,9 @@ async function apiRequest(endpoint, method, data = null, requiresAuth = false) {
                 message;
         }
 
-        throw new Error(message);
+        const error = new Error(message);
+        error.status = response.status;
+        throw error;
     }
 
     return result;

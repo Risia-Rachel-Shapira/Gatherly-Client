@@ -742,8 +742,14 @@ async function loadItems(eventId) {
                             "כמות התפיסה עודכנה בהצלחה!";
 
                     } catch (error) {
-                        itemsMessage.textContent =
-                            `שגיאה בעדכון התפיסה: ${error.message}`;
+                        if (error.status === 409) {
+                            await loadItems(eventId);
+
+                            itemsMessage.textContent = error.message;
+                        } else {
+                            itemsMessage.textContent =
+                                `שגיאה בעדכון התפיסה: ${error.message}`;
+                        }
 
                     } finally {
                         updateButton.disabled = false;
@@ -827,10 +833,16 @@ async function loadItems(eventId) {
                             "הפריט נתפס בהצלחה!";
 
                     } catch (error) {
-                        itemsMessage.textContent =
-                            `לא ניתן לתפוס את הפריט: ${error.message}`;
+                        if (error.status === 409) {
+                            // רענון הרשימה כדי להציג את הכמות העדכנית,
+                            // ורק אחר כך הצגת ההודעה (loadItems מנקה את ההודעה)
+                            await loadItems(eventId);
 
-                        await loadItems(eventId);
+                            itemsMessage.textContent = error.message;
+                        } else {
+                            itemsMessage.textContent =
+                                `לא ניתן לתפוס את הפריט: ${error.message}`;
+                        }
 
                     } finally {
                         claimButton.disabled = false;
