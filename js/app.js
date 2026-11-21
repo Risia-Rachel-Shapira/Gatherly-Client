@@ -218,6 +218,7 @@ loginForm.addEventListener("submit", async (event) => {
 
 async function showEventsScreen() {
     authSection.classList.add("hidden");
+    document.getElementById("authLayout").classList.add("hidden");
     eventDetailsSection.classList.add("hidden");
     eventsSection.classList.remove("hidden");
     document.getElementById("adminUsersSection").classList.add("hidden");
@@ -1530,6 +1531,7 @@ function logout() {
     eventsSection.classList.add("hidden");
     eventDetailsSection.classList.add("hidden");
     authSection.classList.remove("hidden");
+    document.getElementById("authLayout").classList.remove("hidden");
 
     logoutButton.classList.add("hidden");
     document.getElementById("adminUsersSection").classList.add("hidden");

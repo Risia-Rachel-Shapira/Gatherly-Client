@@ -2297,3 +2297,231 @@ textarea::placeholder {
 .admin-table tbody tr:last-child td {
     border-bottom: 0;
 }
+
+
+/* ==========================================================
+   מסך התחברות – אזור הצגת האפליקציה לצד כרטיס ההתחברות
+========================================================== */
+
+.auth-layout {
+    width: min(100%, 1040px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 420px);
+    align-items: center;
+    gap: clamp(24px, 4vw, 56px);
+}
+
+.auth-layout .auth-card {
+    width: 100%;
+    margin: 0;
+    animation: intro-fade-up 600ms ease both;
+    animation-delay: 120ms;
+}
+
+.auth-intro {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(28px, 4vw, 44px);
+    border: 1px solid var(--brand-line);
+    border-radius: 22px;
+    background: linear-gradient(150deg,
+            var(--brand-green-pale) 0%,
+            #F4F7F2 48%,
+            var(--brand-champagne-pale) 100%);
+    color: var(--brand-ink);
+    isolation: isolate;
+    animation: intro-fade-up 600ms ease both;
+}
+
+/* צורות גאומטריות רכות ברקע */
+.intro-shape {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.intro-shape-1 {
+    width: 240px;
+    height: 240px;
+    top: -90px;
+    left: -70px;
+    background: radial-gradient(circle, rgba(57, 122, 103, .18), rgba(57, 122, 103, 0) 70%);
+}
+
+.intro-shape-2 {
+    width: 180px;
+    height: 180px;
+    bottom: -60px;
+    right: -40px;
+    background: radial-gradient(circle, rgba(201, 111, 91, .16), rgba(201, 111, 91, 0) 70%);
+}
+
+.intro-shape-3 {
+    width: 90px;
+    height: 90px;
+    top: 38%;
+    left: 8%;
+    border-radius: 24px;
+    border: 2px solid rgba(200, 172, 120, .28);
+    transform: rotate(18deg);
+}
+
+.intro-title {
+    margin: 0 0 12px;
+    color: var(--brand-forest);
+    font-size: clamp(26px, 3.2vw, 36px);
+    font-weight: 800;
+    line-height: 1.22;
+}
+
+.intro-lead {
+    margin: 0 0 28px;
+    max-width: 46ch;
+    color: #4E615A;
+    font-size: 16px;
+}
+
+.intro-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+}
+
+.intro-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid rgba(23, 72, 61, .07);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .72);
+    animation: intro-fade-up 500ms ease both;
+}
+
+.intro-feature:nth-child(1) { animation-delay: 180ms; }
+.intro-feature:nth-child(2) { animation-delay: 260ms; }
+.intro-feature:nth-child(3) { animation-delay: 340ms; }
+.intro-feature:nth-child(4) { animation-delay: 420ms; }
+
+.intro-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--brand-forest);
+    color: #fff;
+}
+
+.intro-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.intro-feature h2 {
+    margin: 0 0 2px;
+    color: var(--brand-forest);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.intro-feature p {
+    margin: 0;
+    color: var(--brand-muted);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+@keyframes intro-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* טלפון / מסך צר: אחד מתחת לשני, אזור ההצגה למעלה בגרסה מקוצרת */
+@media (max-width: 860px) {
+    .auth-layout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 20px;
+    }
+
+    .auth-intro {
+        width: 100%;
+        max-width: 520px;
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .intro-title {
+        font-size: 23px;
+        margin-bottom: 8px;
+    }
+
+    .intro-lead {
+        margin-bottom: 18px;
+        font-size: 14.5px;
+    }
+
+    .intro-features {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .intro-feature {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 8px;
+        text-align: center;
+    }
+
+    .intro-feature p {
+        display: none;
+    }
+
+    .intro-feature h2 {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .intro-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+
+    .intro-icon svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .auth-layout .auth-card {
+        max-width: 520px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-intro,
+    .intro-feature,
+    .auth-layout .auth-card {
+        animation: none;
+    }
+}
