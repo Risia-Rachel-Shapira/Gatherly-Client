@@ -2492,3 +2492,14 @@ textarea::placeholder {
         animation: none;
     }
 }
+
+/* במסך ההתחברות בלבד: הסתרת הלוגו בכותרת (הכותרת הגדולה כבר אומרת Gatherly)
+   וריווח עליון קטן יותר כדי שהטורים ייראו ממורכזים בגובה המסך */
+body:has(#authLayout:not(.hidden)) .header .logo {
+    visibility: hidden;
+}
+
+.main:has(#authLayout:not(.hidden)) {
+    padding-top: 12px;
+    padding-bottom: 60px;
+}
