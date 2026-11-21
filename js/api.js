@@ -342,3 +342,16 @@ async function getEventMembers(eventId) {
         true
     );
 }
+
+// ===============================
+// Admin - ניהול משתמשים
+// ===============================
+
+async function getAdminUsers(pageNumber = 1, pageSize = 10) {
+    return apiRequest(
+        `/admin/users?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        "GET",
+        null,
+        true
+    );
+}

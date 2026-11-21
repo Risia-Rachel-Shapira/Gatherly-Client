@@ -220,8 +220,10 @@ async function showEventsScreen() {
     authSection.classList.add("hidden");
     eventDetailsSection.classList.add("hidden");
     eventsSection.classList.remove("hidden");
+    document.getElementById("adminUsersSection").classList.add("hidden");
 
     logoutButton.classList.remove("hidden");
+    updateAdminButtonVisibility();
 
     const user = JSON.parse(
         localStorage.getItem("gatherlyUser") || "{}"
@@ -1520,6 +1522,8 @@ function logout() {
     authSection.classList.remove("hidden");
 
     logoutButton.classList.add("hidden");
+    document.getElementById("adminUsersSection").classList.add("hidden");
+    document.getElementById("adminUsersButton").classList.add("hidden");
 
     currentEventId = null;
 
@@ -1918,3 +1922,169 @@ document.querySelectorAll("[data-password-toggle]").forEach((button) => {
 });
 
 
+
+
+// =====================================
+// ניהול משתמשים (Admin בלבד)
+// =====================================
+
+const adminUsersButton = document.getElementById("adminUsersButton");
+const adminUsersSection = document.getElementById("adminUsersSection");
+const adminUsersMessage = document.getElementById("adminUsersMessage");
+const adminUsersTableBody = document.getElementById("adminUsersTableBody");
+const adminPreviousPage = document.getElementById("adminPreviousPage");
+const adminNextPage = document.getElementById("adminNextPage");
+const adminPageInfo = document.getElementById("adminPageInfo");
+
+const adminPageSize = 10;
+let adminCurrentPage = 1;
+
+// קריאת ה-payload של ה-JWT (Base64Url, כולל תמיכה בעברית)
+function getTokenPayload() {
+    const token = localStorage.getItem("gatherlyToken");
+
+    if (!token) {
+        return null;
+    }
+
+    try {
+        const base64 = token.split(".")[1]
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+        const padded = base64 + "=".repeat((4 - base64.length % 4) % 4);
+        const bytes = Uint8Array.from(atob(padded), c => c.charCodeAt(0));
+
+        return JSON.parse(new TextDecoder().decode(bytes));
+    } catch {
+        return null;
+    }
+}
+
+// בדיקה האם המשתמש המחובר הוא Admin לפי ה-role ב-JWT
+function isAdminUser() {
+    const payload = getTokenPayload();
+
+    if (!payload) {
+        return false;
+    }
+
+    const roleClaim =
+        payload.role ??
+        payload.roles ??
+        payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+    const roles = Array.isArray(roleClaim) ? roleClaim : [roleClaim];
+
+    return roles.some(
+        role => typeof role === "string" && role.toLowerCase() === "admin"
+    );
+}
+
+// הצגה/הסתרה של כפתור הניהול לפי התפקיד
+function updateAdminButtonVisibility() {
+    adminUsersButton.classList.toggle("hidden", !isAdminUser());
+}
+
+function formatAdminDate(value) {
+    if (!value) {
+        return "—";
+    }
+
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime())
+        ? "—"
+        : date.toLocaleDateString("he-IL");
+}
+
+async function loadAdminUsers() {
+    adminUsersTableBody.innerHTML = "";
+    adminUsersMessage.textContent = "טוען משתמשים...";
+
+    try {
+        const result = await getAdminUsers(adminCurrentPage, adminPageSize);
+
+        const users = Array.isArray(result)
+            ? result
+            : (result?.items || result?.Items || []);
+
+        const totalPages = Math.max(
+            1,
+            result?.totalPages ??
+            result?.TotalPages ??
+            Math.ceil(
+                (result?.totalCount ?? result?.TotalCount ?? users.length) /
+                adminPageSize
+            )
+        );
+
+        adminUsersMessage.textContent =
+            users.length === 0 ? "לא נמצאו משתמשים." : "";
+
+        users.forEach(user => {
+            const row = document.createElement("tr");
+
+            const values = [
+                user.id ?? user.Id ?? "—",
+                user.fullName ?? user.FullName ?? "—",
+                user.email ?? user.Email ?? "—",
+                user.role ?? user.Role ?? "—",
+                formatAdminDate(user.createdAt ?? user.CreatedAt)
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            adminUsersTableBody.appendChild(row);
+        });
+
+        adminPageInfo.textContent =
+            `עמוד ${adminCurrentPage} מתוך ${totalPages}`;
+
+        adminPreviousPage.disabled = adminCurrentPage <= 1;
+        adminNextPage.disabled = adminCurrentPage >= totalPages;
+
+    } catch (error) {
+        adminUsersMessage.textContent =
+            `שגיאה בטעינת המשתמשים: ${error.message}`;
+
+        adminPreviousPage.disabled = adminCurrentPage <= 1;
+        adminNextPage.disabled = true;
+    }
+}
+
+async function showAdminUsersScreen() {
+    if (!isAdminUser()) {
+        return;
+    }
+
+    eventsSection.classList.add("hidden");
+    eventDetailsSection.classList.add("hidden");
+    adminUsersSection.classList.remove("hidden");
+
+    currentEventId = null;
+    adminCurrentPage = 1;
+
+    await loadAdminUsers();
+}
+
+adminUsersButton.addEventListener("click", showAdminUsersScreen);
+
+document.getElementById("backFromAdminButton")
+    .addEventListener("click", showEventsScreen);
+
+adminPreviousPage.addEventListener("click", async () => {
+    if (adminCurrentPage > 1) {
+        adminCurrentPage--;
+        await loadAdminUsers();
+    }
+});
+
+adminNextPage.addEventListener("click", async () => {
+    adminCurrentPage++;
+    await loadAdminUsers();
+});

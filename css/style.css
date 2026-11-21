@@ -2253,3 +2253,47 @@ textarea::placeholder {
     color: #174b40;
     font-weight: 700;
 }
+
+
+/* מסך ניהול משתמשים (Admin) */
+#adminUsersSection h1 {
+    color: var(--brand-forest);
+    margin: 20px 0 16px;
+}
+
+#adminUsersMessage {
+    color: var(--brand-muted);
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.admin-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--brand-line);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 10px 14px;
+    text-align: right;
+    border-bottom: 1px solid var(--brand-line);
+    white-space: nowrap;
+}
+
+.admin-table th {
+    background: var(--brand-green-pale);
+    color: var(--brand-forest);
+    font-weight: 700;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: 0;
+}

@@ -11,9 +11,14 @@
 <body>
     <header class="header">
         <div class="logo">Gatherly<span>.</span></div>
-        <button id="logoutButton" class="hidden secondary-button">
-            התנתקות
-        </button>
+        <nav>
+            <button id="adminUsersButton" type="button" class="hidden secondary-button">
+                ניהול משתמשים
+            </button>
+            <button id="logoutButton" class="hidden secondary-button">
+                התנתקות
+            </button>
+        </nav>
     </header>
 
     <main class="main">
@@ -170,6 +175,44 @@
                 </button>
                 <span id="pageInfo">עמוד 1</span>
                 <button id="nextPage" class="secondary-button">
+                    הבא
+                </button>
+            </div>
+
+        </section>
+
+        <!-- מסך ניהול משתמשים (Admin בלבד) -->
+        <section id="adminUsersSection" class="events-section hidden">
+
+            <button id="backFromAdminButton" type="button" class="secondary-button">
+                חזרה לאירועים
+            </button>
+
+            <h1>ניהול משתמשים</h1>
+
+            <div id="adminUsersMessage"></div>
+
+            <div class="admin-table-wrapper">
+                <table id="adminUsersTable" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>מזהה</th>
+                            <th>שם מלא</th>
+                            <th>אימייל</th>
+                            <th>תפקיד</th>
+                            <th>תאריך הצטרפות</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUsersTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button id="adminPreviousPage" type="button" class="secondary-button">
+                    הקודם
+                </button>
+                <span id="adminPageInfo">עמוד 1</span>
+                <button id="adminNextPage" type="button" class="secondary-button">
                     הבא
                 </button>
             </div>
