@@ -2943,3 +2943,73 @@ textarea::placeholder {
     clip: rect(0 0 0 0);
     white-space: nowrap;
 }
+
+
+/* ==========================================================
+   מסך הניהול – כרטיסי סיכום
+========================================================== */
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0 0 22px;
+}
+
+.admin-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    border: 1px solid var(--brand-line);
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: var(--brand-shadow);
+}
+
+.admin-stat-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--brand-green-pale);
+    color: var(--brand-forest);
+}
+
+.admin-stat-icon svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.admin-stat-value {
+    display: block;
+    color: var(--brand-forest);
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-stat-label {
+    display: block;
+    margin-top: 3px;
+    color: var(--brand-muted);
+    font-size: 13.5px;
+    font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .admin-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}

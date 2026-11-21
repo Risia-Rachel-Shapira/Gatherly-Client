@@ -2139,6 +2139,8 @@ async function loadAdminUsers() {
         const totalCount =
             result?.totalCount ?? result?.TotalCount ?? users.length;
 
+        setAdminStat(adminUsersCount, totalCount);
+
         const hasResults = totalCount > 0;
 
         // אין תוצאות – מסתירים את שורת העמודים ומשאירים רק את ההודעה
@@ -2197,6 +2199,8 @@ async function showAdminUsersScreen() {
     adminCurrentPage = 1;
 
     showAdminTab("users");
+
+    loadAdminStats();
 
     await loadAdminUsers();
 }
@@ -2561,6 +2565,8 @@ async function loadAdminEvents() {
         const totalCount =
             result?.totalCount ?? result?.TotalCount ?? events.length;
 
+        setAdminStat(adminEventsCount, totalCount);
+
         const totalPages = Math.max(
             1,
             result?.totalPages ??
@@ -2682,3 +2688,42 @@ adminEventsNextPage.addEventListener("click", async () => {
     adminEventsCurrentPage++;
     await loadAdminEvents();
 });
+
+
+
+// =====================================
+// מסך הניהול – כרטיסי סיכום
+// =====================================
+
+const adminUsersCount = document.getElementById("adminUsersCount");
+const adminEventsCount = document.getElementById("adminEventsCount");
+
+function setAdminStat(element, value) {
+    element.textContent = value != null && Number.isFinite(Number(value))
+        ? Number(value).toLocaleString("he-IL")
+        : "–";
+}
+
+function getTotalCount(result) {
+    if (Array.isArray(result)) {
+        return result.length;
+    }
+
+    return result?.totalCount ?? result?.TotalCount;
+}
+
+// טעינת שני המספרים במקביל; כשל – "–" בלי חלון שגיאה
+async function loadAdminStats() {
+    adminUsersCount.textContent = "…";
+    adminEventsCount.textContent = "…";
+
+    await Promise.all([
+        getAdminUsers(1, 1)
+            .then(result => setAdminStat(adminUsersCount, getTotalCount(result)))
+            .catch(() => { adminUsersCount.textContent = "–"; }),
+
+        getAdminEvents(1, 1)
+            .then(result => setAdminStat(adminEventsCount, getTotalCount(result)))
+            .catch(() => { adminEventsCount.textContent = "–"; })
+    ]);
+}

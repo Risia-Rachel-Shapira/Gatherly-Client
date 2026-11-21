@@ -240,6 +240,29 @@
 
             <h1>ניהול המערכת</h1>
 
+            <!-- כרטיסי סיכום -->
+            <div class="admin-stats">
+                <div class="admin-stat-card">
+                    <span class="admin-stat-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.7.8 2.8 2.6 3 5.2"/></svg>
+                    </span>
+                    <div>
+                        <strong id="adminUsersCount" class="admin-stat-value">…</strong>
+                        <span class="admin-stat-label">משתמשים רשומים</span>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <span class="admin-stat-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                    </span>
+                    <div>
+                        <strong id="adminEventsCount" class="admin-stat-value">…</strong>
+                        <span class="admin-stat-label">אירועים במערכת</span>
+                    </div>
+                </div>
+            </div>
+
             <nav class="admin-tabs" role="tablist" aria-label="ניהול">
                 <button type="button" class="admin-tab active" role="tab"
                     id="adminUsersTab" aria-selected="true" aria-controls="adminUsersPanel">
