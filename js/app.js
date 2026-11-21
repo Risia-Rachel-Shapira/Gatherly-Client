@@ -646,7 +646,7 @@ async function loadItems(eventId) {
                     `מחיקת ${item.name ?? item.Name ?? "הפריט"}`
                 );
                 deleteButton.addEventListener("click", () =>
-                    openItemDeleteDialog(item)
+                    confirmAndDeleteItem(item)
                 );
 
                 actions.append(editButton, deleteButton);
@@ -859,7 +859,14 @@ async function loadItems(eventId) {
                 cancelButton.textContent = "ביטול התפיסה";
 
                 cancelButton.addEventListener("click", async () => {
-                    if (!confirm("לבטל את התפיסה של הפריט?")) {
+                    const confirmed = await showConfirmDialog({
+                        title: "לבטל את התפיסה?",
+                        message: "הפריט יחזור לרשימה ומשתתפים אחרים יוכלו לתפוס אותו.",
+                        confirmText: "ביטול התפיסה",
+                        cancelText: "חזרה"
+                    });
+
+                    if (!confirmed) {
                         return;
                     }
 
@@ -871,12 +878,13 @@ async function loadItems(eventId) {
 
                         await loadItems(eventId);
 
-                        itemsMessage.textContent =
-                            "התפיסה בוטלה בהצלחה!";
+                        showToast("התפיסה בוטלה בהצלחה!");
 
                     } catch (error) {
-                        itemsMessage.textContent =
-                            `שגיאה בביטול התפיסה: ${error.message}`;
+                        showErrorDialog(
+                            error.message,
+                            "לא ניתן לבטל את התפיסה"
+                        );
 
                     } finally {
                         cancelButton.disabled = false;
@@ -1240,7 +1248,12 @@ function renderExpenses(expenses) {
             deleteButton.textContent = "מחיקת הוצאה";
 
             deleteButton.addEventListener("click", async () => {
-                if (!confirm("למחוק את ההוצאה?")) return;
+                const confirmed = await showConfirmDialog({
+                    title: "למחוק את ההוצאה?",
+                    message: "ההוצאה תוסר מהתקציב והחישוב של החלק לכל משתתף יתעדכן."
+                });
+
+                if (!confirmed) return;
 
                 try {
                     deleteButton.disabled = true;
@@ -1248,12 +1261,13 @@ function renderExpenses(expenses) {
                     await deleteExpense(id);
                     await refreshBudget();
 
-                    expensesMessage.textContent =
-                        "ההוצאה נמחקה בהצלחה!";
+                    showToast("ההוצאה נמחקה בהצלחה!");
 
                 } catch (error) {
-                    expensesMessage.textContent =
-                        `שגיאה במחיקת ההוצאה: ${error.message}`;
+                    showErrorDialog(
+                        error.message,
+                        "לא ניתן למחוק את ההוצאה"
+                    );
 
                     deleteButton.disabled = false;
                 }
@@ -1356,7 +1370,12 @@ function renderContributions(contributions) {
             deleteButton.textContent = "מחיקת הפקדה";
 
             deleteButton.addEventListener("click", async () => {
-                if (!confirm("למחוק את ההפקדה?")) return;
+                const confirmed = await showConfirmDialog({
+                    title: "למחוק את ההפקדה?",
+                    message: "ההפקדה תוסר מהקופה והיתרה תתעדכן."
+                });
+
+                if (!confirmed) return;
 
                 try {
                     deleteButton.disabled = true;
@@ -1364,12 +1383,13 @@ function renderContributions(contributions) {
                     await deleteContribution(id);
                     await refreshBudget();
 
-                    contributionsMessage.textContent =
-                        "ההפקדה נמחקה בהצלחה!";
+                    showToast("ההפקדה נמחקה בהצלחה!");
 
                 } catch (error) {
-                    contributionsMessage.textContent =
-                        `שגיאה במחיקת ההפקדה: ${error.message}`;
+                    showErrorDialog(
+                        error.message,
+                        "לא ניתן למחוק את ההפקדה"
+                    );
 
                     deleteButton.disabled = false;
                 }
@@ -1719,7 +1739,12 @@ editEventForm.addEventListener("submit", async (event) => {
     }
 });
 deleteEventButton.addEventListener("click", async () => {
-    if (!confirm("האם את בטוחה שברצונך למחוק את האירוע?")) {
+    const confirmed = await showConfirmDialog({
+        title: "למחוק את האירוע?",
+        message: "הפעולה תמחק גם את הפריטים, ההוצאות וההזמנות שלו."
+    });
+
+    if (!confirmed) {
         return;
     }
 
@@ -1733,11 +1758,10 @@ deleteEventButton.addEventListener("click", async () => {
 
         await loadEvents();
 
-        eventsMessage.textContent = "האירוע נמחק בהצלחה!";
+        showToast("האירוע נמחק בהצלחה!");
 
     } catch (error) {
-        eventDetailsMessage.textContent =
-            `שגיאה במחיקת האירוע: ${error.message}`;
+        showErrorDialog(error.message, "לא ניתן למחוק את האירוע");
     }
 });
 
@@ -2202,13 +2226,7 @@ const itemEditDialog = document.getElementById("itemEditDialog");
 const itemEditForm = document.getElementById("itemEditForm");
 const itemEditMessage = document.getElementById("itemEditMessage");
 
-const itemDeleteDialog = document.getElementById("itemDeleteDialog");
-const itemDeleteMessage = document.getElementById("itemDeleteMessage");
-const confirmItemDeleteButton =
-    document.getElementById("confirmItemDeleteButton");
-
 let editingItem = null;
-let deletingItem = null;
 
 const ITEM_ICONS = {
     edit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>',
@@ -2246,14 +2264,30 @@ function openItemEditDialog(item) {
     itemEditDialog.showModal();
 }
 
-function openItemDeleteDialog(item) {
-    deletingItem = item;
+// מחיקת פריט – אישור בחלון המעוצב ואז DELETE /api/Items/{id}
+async function confirmAndDeleteItem(item) {
+    const itemId = item.id ?? item.Id;
+    const itemName = item.name ?? item.Name ?? "";
 
-    document.getElementById("itemDeleteName").textContent =
-        `"${item.name ?? item.Name ?? ""}"`;
+    const confirmed = await showConfirmDialog({
+        title: "למחוק את הפריט?",
+        message: `הפריט "${itemName}" יימחק מהאירוע, כולל מי שכבר תפס אותו.`
+    });
 
-    itemDeleteMessage.textContent = "";
-    itemDeleteDialog.showModal();
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        await deleteItem(itemId);
+        await loadItems(currentEventId);
+
+        showToast("הפריט נמחק.");
+
+    } catch (error) {
+        // למשל 409 – מציגים את ההודעה מהשרת
+        showErrorDialog(error.message, "לא ניתן למחוק את הפריט");
+    }
 }
 
 // שמירת עריכה – PUT /api/Items/{id}
@@ -2305,7 +2339,7 @@ itemEditForm.addEventListener("submit", async (event) => {
         editingItem = null;
 
         await loadItems(currentEventId);
-        itemsMessage.textContent = "הפריט עודכן בהצלחה!";
+        showToast("הפריט עודכן בהצלחה!");
 
     } catch (error) {
         // למשל 409 – מציגים את ההודעה מהשרת בתוך החלון
@@ -2317,38 +2351,8 @@ itemEditForm.addEventListener("submit", async (event) => {
     }
 });
 
-// אישור מחיקה – DELETE /api/Items/{id}
-confirmItemDeleteButton.addEventListener("click", async () => {
-    if (!deletingItem) {
-        return;
-    }
-
-    const itemId = deletingItem.id ?? deletingItem.Id;
-
-    try {
-        confirmItemDeleteButton.disabled = true;
-        confirmItemDeleteButton.textContent = "מוחק...";
-        itemDeleteMessage.textContent = "";
-
-        await deleteItem(itemId);
-
-        itemDeleteDialog.close();
-        deletingItem = null;
-
-        await loadItems(currentEventId);
-        itemsMessage.textContent = "הפריט נמחק.";
-
-    } catch (error) {
-        itemDeleteMessage.textContent = error.message;
-
-    } finally {
-        confirmItemDeleteButton.disabled = false;
-        confirmItemDeleteButton.textContent = "מחיקה";
-    }
-});
-
-// סגירת חלונות: כפתור ביטול או לחיצה על הרקע
-[itemEditDialog, itemDeleteDialog].forEach(dialog => {
+// סגירת חלון העריכה: כפתור ביטול או לחיצה על הרקע
+[itemEditDialog].forEach(dialog => {
     dialog.querySelectorAll("[data-close-dialog]").forEach(button => {
         button.addEventListener("click", () => dialog.close());
     });
@@ -2358,4 +2362,128 @@ confirmItemDeleteButton.addEventListener("click", async () => {
             dialog.close();
         }
     });
+});
+
+
+
+// =====================================
+// רכיבי הודעה מעוצבים: אישור, שגיאה ו-toast
+// (במקום alert / confirm של הדפדפן)
+// =====================================
+
+const appDialog = document.getElementById("appDialog");
+const appDialogIcon = document.getElementById("appDialogIcon");
+const appDialogTitle = document.getElementById("appDialogTitle");
+const appDialogText = document.getElementById("appDialogText");
+const appDialogConfirm = document.getElementById("appDialogConfirm");
+const appDialogCancel = document.getElementById("appDialogCancel");
+const toastContainer = document.getElementById("toastContainer");
+
+const APP_DIALOG_ICONS = {
+    warning: '<svg viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5M12 17.2v.1"/></svg>',
+    error: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>'
+};
+
+let appDialogResolve = null;
+
+// סגירת החלון והחזרת התוצאה (true = אישור, false = ביטול)
+function finishAppDialog(result) {
+    const resolve = appDialogResolve;
+    appDialogResolve = null;
+
+    if (appDialog.open) {
+        appDialog.close();
+    }
+
+    if (resolve) {
+        resolve(result);
+    }
+}
+
+function openAppDialog({ type, title, message, confirmText, cancelText }) {
+    // אם חלון קודם עדיין פתוח – נחשב כביטול שלו
+    finishAppDialog(false);
+
+    return new Promise(resolve => {
+        appDialogResolve = resolve;
+
+        appDialog.classList.toggle("is-error", type === "error");
+
+        appDialogIcon.className = `app-dialog-icon is-${type}`;
+        appDialogIcon.innerHTML = APP_DIALOG_ICONS[type];
+
+        appDialogTitle.textContent = title;
+        appDialogText.textContent = message || "";
+        appDialogText.hidden = !message;
+
+        appDialogConfirm.textContent = confirmText;
+        appDialogConfirm.className =
+            type === "error" ? "primary-button" : "danger-button";
+
+        appDialogCancel.textContent = cancelText || "ביטול";
+        appDialogCancel.classList.toggle("hidden", type === "error");
+
+        appDialog.showModal();
+
+        // פוקוס על הכפתור הבטוח
+        (type === "error" ? appDialogConfirm : appDialogCancel).focus();
+    });
+}
+
+// אישור פעולה – מחזיר Promise<boolean>
+function showConfirmDialog({
+    title,
+    message = "",
+    confirmText = "מחיקה",
+    cancelText = "ביטול"
+}) {
+    return openAppDialog({
+        type: "warning",
+        title,
+        message,
+        confirmText,
+        cancelText
+    });
+}
+
+// הודעת שגיאה – חלון עם כפתור "הבנתי"
+function showErrorDialog(message, title = "משהו השתבש") {
+    return openAppDialog({
+        type: "error",
+        title,
+        message,
+        confirmText: "הבנתי"
+    });
+}
+
+// הודעת הצלחה קצרה שנעלמת לבד
+function showToast(message, duration = 3000) {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = message;
+
+    toastContainer.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add("is-visible"));
+
+    setTimeout(() => {
+        toast.classList.remove("is-visible");
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+appDialogConfirm.addEventListener("click", () => finishAppDialog(true));
+appDialogCancel.addEventListener("click", () => finishAppDialog(false));
+
+// Esc – נחשב כביטול
+appDialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    finishAppDialog(false);
+});
+
+// לחיצה על הרקע המעומעם – נחשבת כביטול
+appDialog.addEventListener("click", (event) => {
+    if (event.target === appDialog) {
+        finishAppDialog(false);
+    }
 });
