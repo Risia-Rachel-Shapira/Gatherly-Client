@@ -1,5 +1,8 @@
 
-const API_BASE_URL = "http://localhost:5141/api";
+const API_BASE_URL =
+    location.hostname === "localhost" || location.hostname === "127.0.0.1"
+        ? "http://localhost:5141/api"
+        : "https://gatherly-server-gk3y.onrender.com/api";
 
 async function apiRequest(endpoint, method, data = null, requiresAuth = false) {
     const headers = {
