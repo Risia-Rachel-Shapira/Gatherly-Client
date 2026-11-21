@@ -2478,3 +2478,335 @@ textarea::placeholder {
     padding-top: 12px;
     padding-bottom: 60px;
 }
+
+
+/* ==========================================================
+   כרטיס פריט – כותרת, פעולות, פס התקדמות ותגיות
+========================================================== */
+
+#itemsList .item-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#itemsList .item-card-header h3 {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.item-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-top: -4px;
+    margin-left: -6px;
+}
+
+.item-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--brand-muted);
+    cursor: pointer;
+}
+
+.item-icon-button svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.item-icon-edit:hover {
+    color: var(--brand-forest);
+    background: var(--brand-green-pale);
+}
+
+.item-icon-delete:hover {
+    color: #B4513D;
+    background: var(--brand-terracotta-pale);
+}
+
+.item-icon-button:focus-visible {
+    outline: 2px solid var(--brand-green);
+    outline-offset: 1px;
+}
+
+#itemsList .item-card .item-description {
+    margin-top: -4px;
+}
+
+.item-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.item-progress-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.item-progress-label {
+    color: var(--brand-ink);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.item-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--brand-champagne-pale);
+    color: #7A6437;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.item-tag-done {
+    background: var(--brand-green-pale);
+    color: var(--brand-forest);
+}
+
+.item-progress-bar {
+    position: relative;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #EEF1EC;
+}
+
+.item-progress-fill {
+    position: absolute;
+    inset-block: 0;
+    right: 0;
+    border-radius: inherit;
+    background: var(--brand-green);
+    transition: width 300ms ease;
+}
+
+.item-progress-bar.is-complete .item-progress-fill {
+    background: var(--brand-forest);
+}
+
+#itemsList .item-claims {
+    padding-top: 12px;
+    margin-top: 2px;
+    border-top: 1px solid var(--brand-line);
+}
+
+/* ==========================================================
+   חלונות (dialog) – עריכת פריט ואישור מחיקה
+========================================================== */
+
+.app-dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    height: fit-content;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    width: min(calc(100% - 32px), 460px);
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--brand-ink);
+    box-shadow: 0 20px 60px rgba(20, 45, 37, .22);
+}
+
+.app-dialog-small {
+    width: min(calc(100% - 32px), 380px);
+}
+
+.app-dialog::backdrop {
+    background: rgba(16, 40, 33, .38);
+}
+
+.app-dialog[open] {
+    animation: dialog-in 180ms ease both;
+}
+
+@keyframes dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.app-dialog-body {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    text-align: right;
+}
+
+.app-dialog h2 {
+    margin: 0 0 16px;
+    color: var(--brand-forest);
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.app-dialog label {
+    margin: 0 0 6px;
+    color: var(--brand-ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.app-dialog input,
+.app-dialog textarea {
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border: 1px solid #DCE5DE;
+    border-radius: 9px;
+    background: #FAFCF9;
+    color: var(--brand-ink);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.app-dialog textarea {
+    resize: vertical;
+}
+
+.app-dialog input:focus,
+.app-dialog textarea:focus {
+    outline: none;
+    border-color: var(--brand-green);
+    box-shadow: 0 0 0 3px rgba(57, 122, 103, .14);
+}
+
+.app-dialog-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.app-dialog-row > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-dialog-text {
+    margin: 0 0 6px;
+    color: #5E6E67;
+    font-size: 14.5px;
+    line-height: 1.6;
+}
+
+.app-dialog-message {
+    min-height: 0;
+    margin: 0 0 10px;
+    color: #C0392B;
+    font-size: 13.5px;
+}
+
+.app-dialog-message:empty {
+    display: none;
+}
+
+.app-dialog-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.app-dialog-actions > button {
+    flex: 1;
+    min-height: 42px;
+    margin: 0;
+}
+
+.app-dialog-danger-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: var(--brand-terracotta-pale);
+    color: #B4513D;
+}
+
+.app-dialog-danger-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.app-dialog-small h2 {
+    margin-bottom: 8px;
+}
+
+.danger-button {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #B4513D;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.danger-button:hover:not(:disabled) {
+    background: #9C4332;
+}
+
+.danger-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+    .app-dialog-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-dialog[open] {
+        animation: none;
+    }
+
+    .item-progress-fill {
+        transition: none;
+    }
+}

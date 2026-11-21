@@ -92,6 +92,7 @@ let currentPage = 1;
 const pageSize = 6;
 
 let currentEventId = null;
+let currentEventOrganizerId = null;
 
 
 // ===============================
@@ -479,6 +480,8 @@ async function showEventDetails(eventId) {
 
         const isOrganizer = currentUserId === organizerId;
 
+        currentEventOrganizerId = organizerId;
+
         organizerActions.classList.toggle("hidden", !isOrganizer);
 
         if (invitationSection) {
@@ -610,12 +613,53 @@ async function loadItems(eventId) {
             const card = document.createElement("article");
             card.className = "item-card";
 
+            // כותרת: שם הפריט + כפתורי עריכה/מחיקה
+            const header = document.createElement("div");
+            header.className = "item-card-header";
+
             const name = document.createElement("h3");
             name.textContent = item.name ?? item.Name ?? "";
+            header.appendChild(name);
+
+            const addedByUserId = Number(
+                item.addedByUserId ?? item.AddedByUserId
+            );
+
+            const canManageItem =
+                currentUserId === Number(currentEventOrganizerId) ||
+                currentUserId === addedByUserId;
+
+            if (canManageItem) {
+                const actions = document.createElement("div");
+                actions.className = "item-actions";
+
+                const editButton = createItemIconButton(
+                    "edit",
+                    `עריכת ${item.name ?? item.Name ?? "הפריט"}`
+                );
+                editButton.addEventListener("click", () =>
+                    openItemEditDialog(item)
+                );
+
+                const deleteButton = createItemIconButton(
+                    "delete",
+                    `מחיקת ${item.name ?? item.Name ?? "הפריט"}`
+                );
+                deleteButton.addEventListener("click", () =>
+                    openItemDeleteDialog(item)
+                );
+
+                actions.append(editButton, deleteButton);
+                header.appendChild(actions);
+            }
+
+            const descriptionText =
+                (item.description ?? item.Description ?? "").trim();
 
             const description = document.createElement("p");
-            description.textContent =
-                item.description ?? item.Description ?? "";
+            description.className = "item-description";
+            description.textContent = descriptionText;
+            description.hidden = descriptionText === "";
 
             const quantity = Number(item.quantity ?? item.Quantity ?? 0);
 
@@ -627,23 +671,63 @@ async function loadItems(eventId) {
                 item.remainingQuantity ?? item.RemainingQuantity ?? 0
             );
 
-            const quantityInfo = document.createElement("p");
-            quantityInfo.textContent = `כמות נדרשת: ${quantity}`;
+            // פס התקדמות: כמה נתפס מתוך הכמות הנדרשת
+            const progress = document.createElement("div");
+            progress.className = "item-progress";
 
-            const claimedInfo = document.createElement("p");
-            claimedInfo.textContent = `כמות שנתפסה: ${claimedQuantity}`;
+            const progressTop = document.createElement("div");
+            progressTop.className = "item-progress-top";
 
-            const remainingInfo = document.createElement("p");
-            remainingInfo.textContent = `כמות שנותרה: ${remainingQuantity}`;
+            const progressLabel = document.createElement("span");
+            progressLabel.className = "item-progress-label";
+            progressLabel.textContent =
+                `${claimedQuantity} / ${quantity} נתפסו`;
+            progressTop.appendChild(progressLabel);
+
+            const tags = document.createElement("div");
+            tags.className = "item-tags";
+
+            const isComplete = quantity > 0 && claimedQuantity >= quantity;
+
+            if (isComplete) {
+                const doneTag = document.createElement("span");
+                doneTag.className = "item-tag item-tag-done";
+                doneTag.textContent = "הושלם";
+                tags.appendChild(doneTag);
+            }
 
             const estimatedCost =
                 item.estimatedCost ?? item.EstimatedCost;
 
-            const costInfo = document.createElement("p");
-            costInfo.textContent =
-                estimatedCost == null
-                    ? "עלות משוערת: לא צוינה"
-                    : `עלות משוערת: ${estimatedCost} ₪`;
+            if (estimatedCost != null && estimatedCost !== "") {
+                const costTag = document.createElement("span");
+                costTag.className = "item-tag";
+                costTag.textContent = `עלות משוערת ${formatMoney(estimatedCost)}`;
+                tags.appendChild(costTag);
+            }
+
+            progressTop.appendChild(tags);
+
+            const progressBar = document.createElement("div");
+            progressBar.className = "item-progress-bar";
+            progressBar.setAttribute("role", "progressbar");
+            progressBar.setAttribute("aria-valuemin", "0");
+            progressBar.setAttribute("aria-valuemax", String(quantity));
+            progressBar.setAttribute("aria-valuenow", String(claimedQuantity));
+            progressBar.setAttribute("aria-label", "כמות שנתפסה");
+
+            const progressFill = document.createElement("span");
+            progressFill.className = "item-progress-fill";
+            progressFill.style.width = quantity > 0
+                ? `${Math.min(100, (claimedQuantity / quantity) * 100)}%`
+                : "0%";
+
+            if (isComplete) {
+                progressBar.classList.add("is-complete");
+            }
+
+            progressBar.appendChild(progressFill);
+            progress.append(progressTop, progressBar);
 
             // הצגת התפיסות
             const claimsSection = document.createElement("div");
@@ -868,12 +952,9 @@ async function loadItems(eventId) {
             }
 
             card.append(
-                name,
+                header,
                 description,
-                quantityInfo,
-                claimedInfo,
-                remainingInfo,
-                costInfo,
+                progress,
                 claimsSection
             );
 
@@ -2109,4 +2190,172 @@ adminPreviousPage.addEventListener("click", async () => {
 adminNextPage.addEventListener("click", async () => {
     adminCurrentPage++;
     await loadAdminUsers();
+});
+
+
+
+// =====================================
+// עריכה ומחיקה של פריט
+// =====================================
+
+const itemEditDialog = document.getElementById("itemEditDialog");
+const itemEditForm = document.getElementById("itemEditForm");
+const itemEditMessage = document.getElementById("itemEditMessage");
+
+const itemDeleteDialog = document.getElementById("itemDeleteDialog");
+const itemDeleteMessage = document.getElementById("itemDeleteMessage");
+const confirmItemDeleteButton =
+    document.getElementById("confirmItemDeleteButton");
+
+let editingItem = null;
+let deletingItem = null;
+
+const ITEM_ICONS = {
+    edit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>',
+    delete: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg>'
+};
+
+function createItemIconButton(type, label) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `item-icon-button item-icon-${type}`;
+    button.title = type === "edit" ? "עריכה" : "מחיקה";
+    button.setAttribute("aria-label", label);
+    button.innerHTML = ITEM_ICONS[type];
+    return button;
+}
+
+function openItemEditDialog(item) {
+    editingItem = item;
+
+    const estimatedCost = item.estimatedCost ?? item.EstimatedCost;
+
+    document.getElementById("editItemName").value =
+        item.name ?? item.Name ?? "";
+
+    document.getElementById("editItemDescription").value =
+        item.description ?? item.Description ?? "";
+
+    document.getElementById("editItemQuantity").value =
+        String(item.quantity ?? item.Quantity ?? 1);
+
+    document.getElementById("editItemEstimatedCost").value =
+        estimatedCost == null ? "" : String(estimatedCost);
+
+    itemEditMessage.textContent = "";
+    itemEditDialog.showModal();
+}
+
+function openItemDeleteDialog(item) {
+    deletingItem = item;
+
+    document.getElementById("itemDeleteName").textContent =
+        `"${item.name ?? item.Name ?? ""}"`;
+
+    itemDeleteMessage.textContent = "";
+    itemDeleteDialog.showModal();
+}
+
+// שמירת עריכה – PUT /api/Items/{id}
+itemEditForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!editingItem) {
+        return;
+    }
+
+    const itemId = editingItem.id ?? editingItem.Id;
+
+    const name = document.getElementById("editItemName").value.trim();
+    const quantity = Number(
+        document.getElementById("editItemQuantity").value
+    );
+    const costValue =
+        document.getElementById("editItemEstimatedCost").value;
+
+    if (!name) {
+        itemEditMessage.textContent = "יש להזין שם לפריט.";
+        return;
+    }
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+        itemEditMessage.textContent = "הכמות חייבת להיות מספר שלם וחיובי.";
+        return;
+    }
+
+    const itemData = {
+        eventId: currentEventId,
+        name,
+        description:
+            document.getElementById("editItemDescription").value.trim() || null,
+        quantity,
+        estimatedCost: costValue === "" ? null : Number(costValue)
+    };
+
+    const submitButton = itemEditForm.querySelector('button[type="submit"]');
+
+    try {
+        submitButton.disabled = true;
+        submitButton.textContent = "שומר...";
+        itemEditMessage.textContent = "";
+
+        await updateItem(itemId, itemData);
+
+        itemEditDialog.close();
+        editingItem = null;
+
+        await loadItems(currentEventId);
+        itemsMessage.textContent = "הפריט עודכן בהצלחה!";
+
+    } catch (error) {
+        // למשל 409 – מציגים את ההודעה מהשרת בתוך החלון
+        itemEditMessage.textContent = error.message;
+
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "שמירה";
+    }
+});
+
+// אישור מחיקה – DELETE /api/Items/{id}
+confirmItemDeleteButton.addEventListener("click", async () => {
+    if (!deletingItem) {
+        return;
+    }
+
+    const itemId = deletingItem.id ?? deletingItem.Id;
+
+    try {
+        confirmItemDeleteButton.disabled = true;
+        confirmItemDeleteButton.textContent = "מוחק...";
+        itemDeleteMessage.textContent = "";
+
+        await deleteItem(itemId);
+
+        itemDeleteDialog.close();
+        deletingItem = null;
+
+        await loadItems(currentEventId);
+        itemsMessage.textContent = "הפריט נמחק.";
+
+    } catch (error) {
+        itemDeleteMessage.textContent = error.message;
+
+    } finally {
+        confirmItemDeleteButton.disabled = false;
+        confirmItemDeleteButton.textContent = "מחיקה";
+    }
+});
+
+// סגירת חלונות: כפתור ביטול או לחיצה על הרקע
+[itemEditDialog, itemDeleteDialog].forEach(dialog => {
+    dialog.querySelectorAll("[data-close-dialog]").forEach(button => {
+        button.addEventListener("click", () => dialog.close());
+    });
+
+    dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) {
+            dialog.close();
+        }
+    });
 });

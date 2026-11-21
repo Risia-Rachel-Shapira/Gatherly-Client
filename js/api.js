@@ -162,6 +162,18 @@ async function createItemClaim(itemId, quantity) {
 }
 
 
+// עדכון פריט
+async function updateItem(itemId, itemData) {
+    return apiRequest(`/Items/${itemId}`, "PUT", itemData, true);
+}
+
+
+// מחיקת פריט
+async function deleteItem(itemId) {
+    return apiRequest(`/Items/${itemId}`, "DELETE", null, true);
+}
+
+
 // קבלת התפיסות של פריט
 async function getItemClaims(itemId) {
     return apiRequest(
