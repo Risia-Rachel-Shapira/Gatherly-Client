@@ -2347,24 +2347,12 @@ textarea::placeholder {
 
 .intro-title {
     margin: 0 0 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
     color: var(--brand-forest);
-    line-height: 1.15;
-}
-
-.intro-brand {
-    font-size: clamp(40px, 5vw, 54px);
-    font-weight: 900;
-    letter-spacing: -1.5px;
-}
-
-.intro-tagline {
-    font-size: clamp(20px, 2.2vw, 25px);
-    font-weight: 600;
-    color: var(--brand-green);
-    letter-spacing: -.3px;
+    font-size: clamp(32px, 3.8vw, 44px);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -.8px;
+    text-wrap: balance;
 }
 
 .intro-lead {
@@ -2457,16 +2445,8 @@ textarea::placeholder {
     }
 
     .intro-title {
-        align-items: center;
         margin-bottom: 10px;
-    }
-
-    .intro-brand {
-        font-size: 38px;
-    }
-
-    .intro-tagline {
-        font-size: 19px;
+        font-size: 28px;
     }
 
     .intro-lead {
@@ -2493,12 +2473,7 @@ textarea::placeholder {
     }
 }
 
-/* במסך ההתחברות בלבד: הסתרת הלוגו בכותרת (הכותרת הגדולה כבר אומרת Gatherly)
-   וריווח עליון קטן יותר כדי שהטורים ייראו ממורכזים בגובה המסך */
-body:has(#authLayout:not(.hidden)) .header .logo {
-    visibility: hidden;
-}
-
+/* במסך ההתחברות בלבד: ריווח עליון קטן יותר כדי שהטורים ייראו ממורכזים בגובה המסך */
 .main:has(#authLayout:not(.hidden)) {
     padding-top: 12px;
     padding-bottom: 60px;
