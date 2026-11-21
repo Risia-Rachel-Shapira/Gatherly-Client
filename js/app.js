@@ -2196,6 +2196,8 @@ async function showAdminUsersScreen() {
     currentEventId = null;
     adminCurrentPage = 1;
 
+    showAdminTab("users");
+
     await loadAdminUsers();
 }
 
@@ -2486,4 +2488,197 @@ appDialog.addEventListener("click", (event) => {
     if (event.target === appDialog) {
         finishAppDialog(false);
     }
+});
+
+
+
+// =====================================
+// מסך הניהול – לשוניות "משתמשים" ו"אירועים"
+// =====================================
+
+const adminUsersTab = document.getElementById("adminUsersTab");
+const adminEventsTab = document.getElementById("adminEventsTab");
+const adminUsersPanel = document.getElementById("adminUsersPanel");
+const adminEventsPanel = document.getElementById("adminEventsPanel");
+
+const adminEventsMessage = document.getElementById("adminEventsMessage");
+const adminEventsTableWrapper =
+    document.getElementById("adminEventsTableWrapper");
+const adminEventsTableBody = document.getElementById("adminEventsTableBody");
+const adminEventsPagination = document.getElementById("adminEventsPagination");
+const adminEventsPageInfo = document.getElementById("adminEventsPageInfo");
+const adminEventsPreviousPage =
+    document.getElementById("adminEventsPreviousPage");
+const adminEventsNextPage = document.getElementById("adminEventsNextPage");
+
+const adminEventsPageSize = 10;
+let adminEventsCurrentPage = 1;
+
+function showAdminTab(tabName) {
+    const isEvents = tabName === "events";
+
+    adminUsersTab.classList.toggle("active", !isEvents);
+    adminEventsTab.classList.toggle("active", isEvents);
+
+    adminUsersTab.setAttribute("aria-selected", String(!isEvents));
+    adminEventsTab.setAttribute("aria-selected", String(isEvents));
+
+    adminUsersPanel.classList.toggle("hidden", isEvents);
+    adminEventsPanel.classList.toggle("hidden", !isEvents);
+}
+
+adminUsersTab.addEventListener("click", async () => {
+    showAdminTab("users");
+    await loadAdminUsers();
+});
+
+adminEventsTab.addEventListener("click", async () => {
+    showAdminTab("events");
+    adminEventsCurrentPage = 1;
+    await loadAdminEvents();
+});
+
+const ADMIN_DELETE_ICON =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></svg>';
+
+// טעינת כל האירועים במערכת – GET /api/admin/events
+async function loadAdminEvents() {
+    adminEventsTableBody.innerHTML = "";
+    adminEventsMessage.textContent = "טוען אירועים...";
+    adminEventsTableWrapper.classList.add("hidden");
+    adminEventsPagination.classList.add("hidden");
+
+    try {
+        const result = await getAdminEvents(
+            adminEventsCurrentPage,
+            adminEventsPageSize
+        );
+
+        const events = Array.isArray(result)
+            ? result
+            : (result?.items || result?.Items || []);
+
+        const totalCount =
+            result?.totalCount ?? result?.TotalCount ?? events.length;
+
+        const totalPages = Math.max(
+            1,
+            result?.totalPages ??
+            result?.TotalPages ??
+            Math.ceil(totalCount / adminEventsPageSize)
+        );
+
+        // עמוד שהתרוקן (למשל אחרי מחיקת האירוע האחרון בו) – חוזרים עמוד אחורה
+        if (events.length === 0 && totalCount > 0 && adminEventsCurrentPage > 1) {
+            adminEventsCurrentPage = Math.min(adminEventsCurrentPage - 1, totalPages);
+            return loadAdminEvents();
+        }
+
+        // אין אירועים – הודעה בלבד, בלי טבלה ובלי שורת העמודים
+        if (totalCount === 0) {
+            adminEventsMessage.textContent = "אין אירועים במערכת.";
+            return;
+        }
+
+        adminEventsMessage.textContent = "";
+        adminEventsTableWrapper.classList.remove("hidden");
+        adminEventsPagination.classList.remove("hidden");
+
+        events.forEach(event => {
+            const eventId = event.id ?? event.Id;
+            const eventName = event.name ?? event.Name ?? "";
+
+            const row = document.createElement("tr");
+
+            const values = [
+                eventName || "—",
+                formatAdminDate(event.date ?? event.Date),
+                event.location ?? event.Location ?? "—",
+                event.organizerName ?? event.OrganizerName ?? "—"
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value || "—";
+                row.appendChild(cell);
+            });
+
+            const actionsCell = document.createElement("td");
+            actionsCell.className = "admin-actions-col";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "item-icon-button item-icon-delete";
+            deleteButton.title = "מחיקה";
+            deleteButton.setAttribute("aria-label", `מחיקת האירוע ${eventName}`);
+            deleteButton.innerHTML = ADMIN_DELETE_ICON;
+
+            deleteButton.addEventListener("click", () =>
+                confirmAndDeleteAdminEvent(eventId, deleteButton)
+            );
+
+            actionsCell.appendChild(deleteButton);
+            row.appendChild(actionsCell);
+
+            adminEventsTableBody.appendChild(row);
+        });
+
+        adminEventsPageInfo.textContent =
+            `עמוד ${adminEventsCurrentPage} מתוך ${totalPages}`;
+
+        adminEventsPreviousPage.disabled = adminEventsCurrentPage <= 1;
+        adminEventsNextPage.disabled = adminEventsCurrentPage >= totalPages;
+
+    } catch (error) {
+        adminEventsMessage.textContent =
+            `שגיאה בטעינת האירועים: ${error.message}`;
+    }
+}
+
+// מחיקת אירוע – אישור בחלון המעוצב ואז DELETE /api/admin/events/{id}
+async function confirmAndDeleteAdminEvent(eventId, button) {
+    const confirmed = await showConfirmDialog({
+        title: "למחוק את האירוע?",
+        message: "הפעולה תמחק גם את הפריטים, ההוצאות וההזמנות שלו."
+    });
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        button.disabled = true;
+
+        await adminDeleteEvent(eventId);
+
+        showToast("האירוע נמחק בהצלחה!");
+        await loadAdminEvents();
+
+    } catch (error) {
+        button.disabled = false;
+
+        if (error.status === 404) {
+            // האירוע כבר לא קיים – מרעננים כדי להציג את המצב העדכני
+            await loadAdminEvents();
+            showErrorDialog(
+                "האירוע כבר לא קיים במערכת.",
+                "לא ניתן למחוק את האירוע"
+            );
+            return;
+        }
+
+        showErrorDialog(error.message, "לא ניתן למחוק את האירוע");
+    }
+}
+
+adminEventsPreviousPage.addEventListener("click", async () => {
+    if (adminEventsCurrentPage > 1) {
+        adminEventsCurrentPage--;
+        await loadAdminEvents();
+    }
+});
+
+adminEventsNextPage.addEventListener("click", async () => {
+    adminEventsCurrentPage++;
+    await loadAdminEvents();
 });

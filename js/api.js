@@ -367,3 +367,22 @@ async function getAdminUsers(pageNumber = 1, pageSize = 10) {
         true
     );
 }
+
+
+async function getAdminEvents(pageNumber = 1, pageSize = 10) {
+    return apiRequest(
+        `/admin/events?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        "GET",
+        null,
+        true
+    );
+}
+
+async function adminDeleteEvent(eventId) {
+    return apiRequest(
+        `/admin/events/${eventId}`,
+        "DELETE",
+        null,
+        true
+    );
+}

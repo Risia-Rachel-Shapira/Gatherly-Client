@@ -238,7 +238,21 @@
                 חזרה לאירועים
             </button>
 
-            <h1>ניהול משתמשים</h1>
+            <h1>ניהול המערכת</h1>
+
+            <nav class="admin-tabs" role="tablist" aria-label="ניהול">
+                <button type="button" class="admin-tab active" role="tab"
+                    id="adminUsersTab" aria-selected="true" aria-controls="adminUsersPanel">
+                    משתמשים
+                </button>
+                <button type="button" class="admin-tab" role="tab"
+                    id="adminEventsTab" aria-selected="false" aria-controls="adminEventsPanel">
+                    אירועים
+                </button>
+            </nav>
+
+            <!-- לשונית משתמשים -->
+            <div id="adminUsersPanel" role="tabpanel" aria-labelledby="adminUsersTab">
 
             <div id="adminUsersMessage"></div>
 
@@ -265,6 +279,40 @@
                 <button id="adminNextPage" type="button" class="secondary-button">
                     הבא
                 </button>
+            </div>
+
+            </div>
+
+            <!-- לשונית אירועים -->
+            <div id="adminEventsPanel" class="hidden" role="tabpanel" aria-labelledby="adminEventsTab">
+
+                <div id="adminEventsMessage" class="admin-message"></div>
+
+                <div id="adminEventsTableWrapper" class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>שם האירוע</th>
+                                <th>תאריך</th>
+                                <th>מיקום</th>
+                                <th>מארגן</th>
+                                <th class="admin-actions-col"><span class="visually-hidden">פעולות</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminEventsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="adminEventsPagination" class="pagination">
+                    <button id="adminEventsPreviousPage" type="button" class="secondary-button">
+                        הקודם
+                    </button>
+                    <span id="adminEventsPageInfo">עמוד 1</span>
+                    <button id="adminEventsNextPage" type="button" class="secondary-button">
+                        הבא
+                    </button>
+                </div>
+
             </div>
 
         </section>

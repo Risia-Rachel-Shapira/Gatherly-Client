@@ -2877,3 +2877,69 @@ textarea::placeholder {
         transition: none;
     }
 }
+
+
+/* ==========================================================
+   מסך הניהול – לשוניות ועמודת פעולות
+========================================================== */
+
+.admin-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 0 0 18px;
+}
+
+.admin-tab {
+    padding: 9px 18px;
+    border: 1px solid #E2E7E1;
+    border-radius: 9px;
+    color: #65756D;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-tab:hover {
+    color: var(--brand-forest);
+    background: var(--brand-green-pale);
+    border-color: #D4E1D8;
+}
+
+.admin-tab.active {
+    color: #fff;
+    background: var(--brand-forest);
+    border-color: var(--brand-forest);
+}
+
+.admin-tab:focus-visible {
+    outline: 2px solid var(--brand-green);
+    outline-offset: 2px;
+}
+
+.admin-message {
+    color: var(--brand-muted);
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.admin-message:empty {
+    display: none;
+}
+
+.admin-table .admin-actions-col {
+    width: 1%;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
