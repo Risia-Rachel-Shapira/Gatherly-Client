@@ -255,6 +255,16 @@ async function loadEvents() {
                 (result.totalCount ?? result.TotalCount ?? 0) / pageSize
             );
 
+        const totalCount =
+            result.totalCount ?? result.TotalCount ?? events.length;
+
+        const hasResults = totalCount > 0;
+
+        // אין תוצאות – מסתירים את שורת העמודים ומשאירים רק את ההודעה
+        document.getElementById("pageInfo")
+            .closest(".pagination")
+            .classList.toggle("hidden", !hasResults);
+
         eventsMessage.textContent = "";
 
         if (events.length === 0) {
@@ -2018,6 +2028,16 @@ async function loadAdminUsers() {
                 adminPageSize
             )
         );
+
+        const totalCount =
+            result?.totalCount ?? result?.TotalCount ?? users.length;
+
+        const hasResults = totalCount > 0;
+
+        // אין תוצאות – מסתירים את שורת העמודים ומשאירים רק את ההודעה
+        adminPageInfo
+            .closest(".pagination")
+            .classList.toggle("hidden", !hasResults);
 
         adminUsersMessage.textContent =
             users.length === 0 ? "לא נמצאו משתמשים." : "";
